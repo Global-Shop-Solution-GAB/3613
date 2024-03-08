@@ -1,0 +1,214 @@
+Program.Sub.Preflight.Start
+Variable.Global.uPacking.Declare(String)
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+'This project was coded by FEQ on 12/7/16.
+'This will run from hook 28530, which is the pre-save hook on the new shipment screen
+'This will create entries in teh GCG_3613_ShipHist table for any component part that is flagged as foreign of the parts in the shipment
+
+V.Local.sHook.Declare(String)
+
+V.Local.sHook.Set(V.Caller.Hook)
+
+F.ODBC.Connection!con.OpenConnection(V.Ambient.PDSN, V.Ambient.PUser, V.Ambient.PPass)
+
+F.Intrinsic.Control.SelectCase(V.Local.sHook)
+
+'Pre-save hook on New Shipment screen.
+F.Intrinsic.Control.Case("28530")
+	F.Intrinsic.Control.CallSub(pulldata)
+	F.Intrinsic.Control.CallSub(processdata)
+	F.Intrinsic.Control.CallSub(savetodb)
+
+F.Intrinsic.Control.CaseElse
+	F.Intrinsic.Control.CallSub(unload)
+F.Intrinsic.Control.EndSelect
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ShipHist.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.PullData.Start
+F.Intrinsic.Control.SetErrorHandler("PullData_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+
+V.Global.uPacking.Set(V.Passed.000168)
+
+V.Local.sFile.Declare(String)
+V.Local.iRows.Declare(Long)
+V.Local.iCount.Declare(Long)
+V.Local.sRow.Declare(String)
+V.Local.sFields.Declare(String)
+V.Local.sTypes.Declare(String)
+
+'The data on the grid is stored in a BDF
+F.Intrinsic.BDF.Load("AUX001", "AUX001")
+F.Intrinsic.BDF.ReadRowCount("AUX001", V.Local.iRows)
+F.Intrinsic.Math.Sub(V.Local.iRows, 1, V.Local.iRows)
+
+'We are going to store it as a strint to split in order to store in a data table
+F.Intrinsic.Control.For(V.Local.iCount, 0, V.Local.iRows, 1)
+	F.Intrinsic.BDF.ReadRow("AUX001", V.Local.iCount, V.Local.sRow)
+	F.Intrinsic.String.Build("{0}{1}!*!", V.Local.sFile, V.Local.sRow, V.Local.sFile)
+F.Intrinsic.Control.Next(V.Local.iCount)
+
+'This is for the purpose of deliting the last delimeter
+F.Intrinsic.String.Build("{0}****", V.Local.sFile, V.Local.sFile)
+F.Intrinsic.String.Split(V.Local.sFile, "!*!****", V.Local.sFile)
+
+V.Local.sFields.Set("Order*!*Line*!*OrderQty*!*ShippedQty*!*NetWt*!*GrossWt*!*Cartons*!*BackOrdQty*!*PartNo*!*Desc*!*Loc*!*UM*!*AvailQty*!*PromDate*!*Part")
+V.Local.sTypes.Set("String*!*String*!*Float*!*Float*!*Float*!*Float*!*String*!*Float*!*String*!*String*!*String*!*String*!*Float*!*String*!*String")
+
+'This data table has a list of all FG parts and how many are getting shipped
+F.Data.DataTable.CreateFromString("WIPPARTS", V.Local.sFile(0), V.Local.sFields, V.Local.sTypes, "|~|", "!*!", True)
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("PullData_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ShipHist.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.PullData.End
+
+Program.Sub.ProcessData.Start
+F.Intrinsic.Control.SetErrorHandler("ProcessData_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+
+V.Local.iCount.Declare(String)
+V.Local.sSql.Declare(String)
+V.Local.fQty.Declare(Float)
+V.Local.sOrder.Declare(String)
+
+'Create a data table with columns from DB table and additional "foreign" field to flag parts that are foreign
+F.Data.DataTable.Create("FULL", True)
+
+F.Data.DataTable.AddColumn("FULL", "PACKING_NO", "String")
+F.Data.DataTable.AddColumn("FULL", "ORDER_NO", "String")
+F.Data.DataTable.AddColumn("FULL", "FG_PART", "String")
+F.Data.DataTable.AddColumn("FULL", "FG_QTY", "Float")
+F.Data.DataTable.AddColumn("FULL", "COMP_PART", "String")
+F.Data.DataTable.AddColumn("FULL", "FREIGHTZONE", "String")
+F.Data.DataTable.AddColumn("FULL", "SHIP_USER", "String")
+F.Data.DataTable.AddColumn("FULL", "DATE", "Date")
+F.Data.DataTable.AddColumn("FULL", "FOREIGN_PT", "String")
+F.Data.DataTable.AddColumn("FULL", "COMP_QTY", "Float")
+
+
+'Loop through the table and create temp datatable of Component parts for each bom
+F.Intrinsic.Control.For(V.Local.iCount, 0, V.DataTable.WIPPARTS.RowCount--, 1)
+	F.Intrinsic.Control.If(V.DataTable.WIPPARTS(V.Local.iCount).ShippedQty!FieldValFloat, >, 0)
+		V.Local.sSql.Set("Select rtrim(' ') as PACKING_NO, rtrim(' ') as ORDER_NO, PARENT as FG_PART, 0 as FG_QTY, PART as COMP_PART, QUANTITY, rtrim(' ') as FREIGHTZONE, rtrim(' ') as SHIP_USER, cast(null as date) as DATE,")
+		F.Intrinsic.String.Build("{0}'' as FOREIGN_PT from V_BOM_MSTR where PARENT = '{1}'", V.Local.sSql, V.DataTable.WIPPARTS(V.Local.iCount).PartNo!FieldValTrim, V.Local.sSql)
+		F.Data.DataTable.CreateFromSql("TEMP", "con", V.Local.sSql, True)
+		F.Intrinsic.String.LPad(V.DataTable.WIPPARTS(V.Local.iCount).Order!FieldValTrim, "0", 7, V.Local.sOrder)
+		F.Data.DataTable.SetValue("TEMP", -1, "ORDER_NO", V.Local.sOrder)
+		V.Local.fQty.Set(V.DataTable.WIPPARTS(V.Local.iCount).ShippedQty!FieldValFloat)
+		F.Data.DataTable.SetValue("TEMP", -1, "FG_QTY", V.Local.fQty)
+		F.Data.DataTable.AddExpressionColumn("TEMP", "COMP_QTY", Float, "FG_QTY * QUANTITY")
+		
+		'Merge temp table table to full table
+		F.Data.DataTable.Merge("TEMP", "FULL", True, 2)
+		F.Data.DataTable.Close("TEMP")
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.Next(V.Local.iCount)
+
+'We fill the Freightzone column using a dictionary
+F.Data.Dictionary.CreateFromSQL("DICT", "con", "Select PURCHASE_ORDER as ORDER_NO, ZONE_ADMISSION as FREIGHTZONE from GCG_3613_CONTAINER")
+F.Data.Dictionary.SetDefaultReturn("DICT", "")
+F.Data.DataTable.FillFromDictionary("FULL", "DICT", "ORDER_NO", "FREIGHTZONE")
+F.Data.Dictionary.Close("DICT")
+
+F.Data.DataTable.SetValue("FULL", -1, "PACKING_NO", V.Global.uPacking)
+F.Data.DataTable.SetValue("FULL", -1, "SHIP_USER", V.Caller.User)
+F.Data.DataTable.SetValue("FULL", -1, "DATE", V.Ambient.Date)
+
+'We fill the Foreign_Pt flag column using a dictionary
+F.Data.Dictionary.CreateFromSQL("DICT", "con", "Select PART as COMP_PART, rtrim('Y') as FOREIGN_PT from GCG_3613_ForeignPart")
+F.Data.Dictionary.SetDefaultReturn("DICT", "N")
+F.Data.DataTable.FillFromDictionary("FULL", "DICT", "COMP_PART", "FOREIGN_PT")
+F.Data.Dictionary.Close("DICT") 
+
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("ProcessData_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ShipHist.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.ProcessData.End
+
+Program.Sub.SaveToDB.Start
+F.Intrinsic.Control.SetErrorHandler("SaveToDB_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+
+'We are using a view to filter the information to only display foreign parts
+F.Data.DataView.Create("FULL", "VIEW", 22, "FOREIGN_PT = 'Y'", "PACKING_NO ASC")
+F.Data.DataView.ToDataTable("FULL", "VIEW", "FINAL", True)
+F.Data.DataTable.SaveToDB("FINAL", "con", "GCG_3613_ShipHist", "Beans", 128)
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("SaveToDB_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ShipHist.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.SaveToDB.End
+
+Program.Sub.unload.Start
+
+F.ODBC.Connection!con.Close
+F.Intrinsic.Control.End
+
+Program.Sub.unload.End
+
+Program.Sub.Comments.Start
+${$0$}$Foreign Parts Project$}$SISCO$}$12/7/2016 1:53:53 PM$}$True
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This will be a script that will save entries for Shipment history into a custom table 
+Program.Sub.Comments.End
