@@ -1,0 +1,174 @@
+Program.Sub.ScreenSU.Start
+Gui.Form..Create
+Gui.Form..Size(7800,5985)
+Gui.Form..MinX(0)
+Gui.Form..MinY(0)
+Gui.Form..Position(0,0)
+Gui.Form..BackColor(-2147483633)
+Gui.Form..MousePointer(0)
+Gui.Form..Event(UnLoad,Form_UnLoad)
+Gui.Form.GsGridPart.Create(GsGridControl)
+Gui.Form.GsGridPart.Size(7575,5100)
+Gui.Form.GsGridPart.Position(30,645)
+Gui.Form.cmdReCal.Create(Button)
+Gui.Form.cmdReCal.Size(1845,375)
+Gui.Form.cmdReCal.Position(105,150)
+Gui.Form.cmdReCal.Caption("ReCalculate")
+Gui.Form.cmdReCal.Event(Click,Recalculate)
+Gui.Form.cmdPrint.Create(Button)
+Gui.Form.cmdPrint.Size(960,375)
+Gui.Form.cmdPrint.Position(6570,135)
+Gui.Form.cmdPrint.Caption("Print")
+Gui.Form.cmdPrint.Event(Click,cmdPrint_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+V.Global.iBIRunID.Declare(Long)
+V.Global.iBILogID.Declare(Long)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Function.ODBC.Connection!con.OpenConnection(Variable.Ambient.PDSN, Variable.Ambient.PUser, Variable.Ambient.PPass)
+'call to create datatable
+
+Function.Intrinsic.Control.CallSub(fill_grid)
+GUI.Form..Show
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_EstShipQty2.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Main.End
+
+Program.Sub.Fill_Grid.Start
+F.Intrinsic.Control.SetErrorHandler("Fill_Grid_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local..BulkDeclareString(ssql,sSort,sArrStr)
+V.Local..BulkDeclareLong(iC,iArray,iRet, iCArray)
+V.Local.iArray.Redim(0,11)
+
+F.Data.DataTable.CreateFromSQL("Grid", "con", "Select PART, REV, LOC as Location, rTrim(' ') as BIRUNID,  rTrim(' ') as QTY ,rTrim(' ') as Usage From GCG_3613_ForeignPart",TRUE)
+'fill qty and usage
+V.Local.ssql.Set("Select GCG_3613_ForeignPart.PART, GCG_3613_ForeignPart.LOC as Location,rTrim(' ') as QTY,rTrim(' ') as Usage,INVENTORY_MSTR.QTY_USAGE_MO_01,INVENTORY_MSTR.QTY_USAGE_MO_02,INVENTORY_MSTR.QTY_USAGE_MO_03,INVENTORY_MSTR.QTY_USAGE_MO_04,INVENTORY_MSTR.QTY_USAGE_MO_05,INVENTORY_MSTR.QTY_USAGE_MO_06,INVENTORY_MSTR.QTY_USAGE_MO_07, INVENTORY_MSTR.QTY_USAGE_MO_08,INVENTORY_MSTR.QTY_USAGE_MO_09, INVENTORY_MSTR.QTY_USAGE_MO_10, INVENTORY_MSTR.QTY_USAGE_MO_11, INVENTORY_MSTR.QTY_USAGE_MO_12 From GCG_3613_ForeignPart Left Join INVENTORY_MSTR ON GCG_3613_ForeignPart.PART = INVENTORY_MSTR.PART And GCG_3613_ForeignPart.LOC = INVENTORY_MSTR.LOCATION")
+F.Data.DataTable.CreateFromSQL("QTY", "con", V.Local.ssql)
+F.Intrinsic.Control.For(V.Local.iC,0,V.DataTable.QTY.RowCount--, 1)
+	'set array values
+	F.Intrinsic.String.Build("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}",V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_01!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_02!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_03!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_04!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_05!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_06!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_07!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_08!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_09!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_10!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_11!FieldVal,V.DataTable.QTY(V.Local.iC).QTY_USAGE_MO_12!FieldVal,Variable.Local.sArrStr)
+	F.Intrinsic.String.Split(Variable.Local.sArrStr,",",Variable.Local.sArrStr.Long)
+	F.Intrinsic.Control.For(V.Local.iCArray, 0, 11, 1)
+		Variable.Local.iArray(V.Local.iCArray).Set(Variable.Local.sArrStr(V.Local.iCArray))
+	F.Intrinsic.Control.Next(V.Local.iCArray)
+	Function.Intrinsic.Variable.ArrayMax(Variable.Local.iArray, Variable.Local.iRet)
+	F.Data.DataTable.SetValue("Grid", V.Local.iC, "QTY",V.Local.iRet)
+F.Intrinsic.Control.Next(V.Local.iC)
+'call recal to get usage
+F.Intrinsic.Control.CallSub(recalculate)
+Gui.Form.GsGridPart.AddGridViewFromDataTable("Grid","Grid")
+Gui.Form.GsGridPart.MainView("Grid")
+Gui.Form.GsGridPart.SetColumnProperty("Grid","Part","Width","150")
+GUI.Form.GsGridPart.SetColumnProperty("Grid","BIRUNID","Visible",FALSE)
+GUI.Form.GsGridPart.SetColumnProperty("Grid","QTY","ReadOnly",FALSE)
+GUI.Form.GsGridPart.SetColumnProperty("Grid","QTY","AllowEdit",TRUE)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Fill_Grid_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_EstShipQty2.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Fill_Grid.End
+
+Program.Sub.Form_UnLoad.Start
+F.Intrinsic.Control.SetErrorHandler("Form_UnLoad_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Function.ODBC.Connection!con.Close
+Function.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Form_UnLoad_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_EstShipQty2.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End
+
+Function.Intrinsic.Control.EndIf
+Program.Sub.Form_UnLoad.End
+
+Program.Sub.Recalculate.Start
+F.Intrinsic.Control.SetErrorHandler("cmdPrint_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.iC.Declare(Long)
+V.Local.iRet.Declare(Float)
+'calculate the usage based on QTY
+F.Intrinsic.Control.For(V.Local.iC,0,V.DataTable.Grid.RowCount--, 1)
+	F.Intrinsic.Math.Mult(V.DataTable.GRID(V.Local.iC).QTY!FieldVal,1.3, V.Local.iRet)
+	F.Data.DataTable.SetValue("Grid", V.Local.iC, "Usage",V.Local.iRet)
+F.Intrinsic.Control.Next(V.Local.iC)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdPrint_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_EstShipQty2.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Recalculate.End
+
+Program.Sub.cmdPrint_Click.Start
+F.Intrinsic.Control.SetErrorHandler("Fill_Grid_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local..BulkDeclareString(sParam,sVal)
+F.Global.BI.GetRunID(V.Global.iBIRunID)
+F.Global.BI.StartLogging(V.Global.iBIRunID,-1,-1,"",V.Global.iBILogID)
+
+Function.ODBC.Connection!con.Execute("Delete from GCG_3613_ShipQtyZZ")
+Function.Data.DataTable.SetValue("Grid", -1, "BIRUNID", Variable.Global.iBIRunID)
+Function.Data.DataTable.SaveToDB("Grid", "con", "GCG_3613_ShipQtyZZ", "Part*!*Rev*!*Location", 7)
+'Stop Logging
+F.Global.BI.StopLogging(V.Global.iBILogID)
+V.Local.sVal.Set(V.Global.iBIRunID)
+V.Local.sParam.Set("BIRUNID")
+'Print the Report
+F.Global.BI.RunReportPreProcessor(V.Global.iBIRunID,V.Global.iBILogID,V.Local.sParam,V.Local.sVal,"",-1,True,"",-1,"",-1,"","",V.Global.iBIRunID)
+
+Function.Intrinsic.Control.CallSub(form_unload)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Fill_Grid_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_EstShipQty2.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdPrint_Click.End
+
+Program.Sub.Comments.Start
+${$0$}$GCG_3613_EstShipQty2.g2u$}$DH1$}$12/16/2016 8:19:20 AM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a screen for the foreign part screen of the Freight Trade Zone project.
+Program.Sub.Comments.End
