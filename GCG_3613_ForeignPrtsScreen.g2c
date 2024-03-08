@@ -1,0 +1,561 @@
+Program.Sub.ScreenSU.Start
+Gui.F_ForeignPts..Create
+Gui.F_ForeignPts..Caption("Foreign Parts")
+Gui.F_ForeignPts..Size(20280,10005)
+Gui.F_ForeignPts..MinX(0)
+Gui.F_ForeignPts..MinY(0)
+Gui.F_ForeignPts..Position(0,0)
+Gui.F_ForeignPts..BackColor(-2147483633)
+Gui.F_ForeignPts..MousePointer(0)
+Gui.F_ForeignPts..Event(UnLoad,F_ForeignPts_UnLoad)
+Gui.F_ForeignPts.txtPart.Create(TextBox,"",True,2505,300,0,195,405,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtRev.Create(TextBox,"",True,750,300,0,2895,405,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtRev.MaxLength(3)
+Gui.F_ForeignPts.txtLoc.Create(TextBox,"",True,750,300,0,3900,405,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtLoc.MaxLength(2)
+Gui.F_ForeignPts.cmdBrowse.Create(Button)
+Gui.F_ForeignPts.cmdBrowse.Size(375,375)
+Gui.F_ForeignPts.cmdBrowse.Position(4845,345)
+Gui.F_ForeignPts.cmdBrowse.Caption("^")
+Gui.F_ForeignPts.cmdBrowse.Event(Click,cmdBrowse_Click)
+Gui.F_ForeignPts.lblPart.Create(Label,"Part",True,1935,255,0,195,150,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblRev.Create(Label,"Rev",True,495,255,0,2895,150,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblLoc.Create(Label,"Loc",True,495,255,0,3855,150,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.txtHTSUSNo.Create(TextBox,"",True,1500,300,0,195,1500,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtHTSUSNo.MaxLength(12)
+Gui.F_ForeignPts.txtHTSUSRate.Create(TextBox,"",True,1245,300,0,1905,1500,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtHTSUSRate.NumericOnly(True)
+Gui.F_ForeignPts.txtHTSUSRate.MaxLength(9)
+Gui.F_ForeignPts.txtHTSUSDesc.Create(TextBox,"",True,2955,300,0,3345,1500,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtHTSUSDesc.MaxLength(30)
+Gui.F_ForeignPts.txtADCVDCase.Create(TextBox,"",True,1500,300,0,6495,1500,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtADCVDCase.MaxLength(20)
+Gui.F_ForeignPts.txtCountry.Create(TextBox,"",True,750,300,0,8205,1500,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtCountry.MaxLength(2)
+Gui.F_ForeignPts.lblHTSUSNo.Create(Label,"HTSUS No.",True,1500,255,0,195,1245,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblHTSUSRate.Create(Label,"HTSUS Rate",True,1200,255,0,1905,1245,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblHTSUSDesc.Create(Label,"HTSUS Description",True,1935,255,0,3345,1245,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblADCVDCaseNo.Create(Label,"AD/CVD Case No.",True,1695,255,0,6495,1245,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblCountry.Create(Label,"Country of Origin",True,1935,255,0,8205,1245,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblHTSUSWeight.Create(Label,"HTSUS Weight",True,1500,255,0,195,2100,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblConvFact.Create(Label,"Conver. Factor",True,1200,255,0,1905,2100,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblHTSUSUM.Create(Label,"HTSUS UM",True,1005,255,0,3465,2100,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblFormID.Create(Label,"Form ID",True,1005,255,0,4845,2100,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblADCVDRate.Create(Label,"AD/CVD Rate",True,1500,255,0,6495,2100,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.lblLocCode.Create(Label,"Location Code",True,1935,255,0,8205,2100,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.txtHTSUSWeight.Create(TextBox,"",True,1500,300,0,195,2355,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtHTSUSWeight.NumericOnly(True)
+Gui.F_ForeignPts.txtHTSUSWeight.MaxLength(9)
+Gui.F_ForeignPts.txtConvFact.Create(TextBox,"",True,1560,300,0,1815,2355,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtConvFact.NumericOnly(True)
+Gui.F_ForeignPts.txtConvFact.MaxLength(15)
+Gui.F_ForeignPts.txtHTSUSUM.Create(TextBox,"",True,1245,300,0,3465,2355,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtHTSUSUM.MaxLength(6)
+Gui.F_ForeignPts.txtFormID.Create(TextBox,"",True,1215,300,0,4845,2355,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtFormID.MaxLength(5)
+Gui.F_ForeignPts.txtADCVDRate.Create(TextBox,"",True,1200,300,0,6495,2355,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtADCVDRate.NumericOnly(True)
+Gui.F_ForeignPts.txtADCVDRate.MaxLength(9)
+Gui.F_ForeignPts.txtLocCode.Create(TextBox,"",True,1005,300,0,8205,2355,True,0,"Arial",8,-2147483643,1)
+Gui.F_ForeignPts.txtLocCode.MaxLength(6)
+Gui.F_ForeignPts.chkNPF.Create(CheckBox)
+Gui.F_ForeignPts.chkNPF.Size(750,360)
+Gui.F_ForeignPts.chkNPF.Position(195,3150)
+Gui.F_ForeignPts.chkNPF.Caption("NPF")
+Gui.F_ForeignPts.chkPF.Create(CheckBox)
+Gui.F_ForeignPts.chkPF.Size(750,360)
+Gui.F_ForeignPts.chkPF.Position(1050,3150)
+Gui.F_ForeignPts.chkPF.Caption("PF")
+Gui.F_ForeignPts.chkD.Create(CheckBox)
+Gui.F_ForeignPts.chkD.Size(750,360)
+Gui.F_ForeignPts.chkD.Position(1905,3150)
+Gui.F_ForeignPts.chkD.Caption("D")
+Gui.F_ForeignPts.chkZR.Create(CheckBox)
+Gui.F_ForeignPts.chkZR.Size(750,360)
+Gui.F_ForeignPts.chkZR.Position(2745,3150)
+Gui.F_ForeignPts.chkZR.Caption("ZR")
+Gui.F_ForeignPts.lblZoneStat.Create(Label,"Zone Status",True,1935,255,0,195,2895,True,0,"Arial",8,-2147483633,0)
+Gui.F_ForeignPts.cmdADD.Create(Button)
+Gui.F_ForeignPts.cmdADD.Size(1005,375)
+Gui.F_ForeignPts.cmdADD.Position(150,3585)
+Gui.F_ForeignPts.cmdADD.Caption("ADD")
+Gui.F_ForeignPts.cmdADD.Event(Click,cmdADD_Click)
+Gui.F_ForeignPts.cmdADD.Enabled(False)
+Gui.F_ForeignPts.GsGridControl1.Create(GsGridControl)
+Gui.F_ForeignPts.GsGridControl1.Size(19995,5265)
+Gui.F_ForeignPts.GsGridControl1.Position(15,4080)
+Gui.F_ForeignPts.GsGridControl1.Event(RowClick,GsGridControl1_RowClick)
+Gui.F_ForeignPts.cmdRemove.Create(Button)
+Gui.F_ForeignPts.cmdRemove.Size(1290,375)
+Gui.F_ForeignPts.cmdRemove.Position(1290,3585)
+Gui.F_ForeignPts.cmdRemove.Caption("Remove")
+Gui.F_ForeignPts.cmdRemove.Event(Click,cmdRemove_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+V.Global.iRow.Declare(Long, -1)
+V.Global.iNum.Declare(Long, 0)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass,10000)
+f.Intrinsic.Control.CallSub(loaddata)
+Gui.F_ForeignPts..Show
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.cmdBrowse_Click.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.sTitles.Declare(String)
+V.Local.sWidths.Declare(String)
+V.Local.sRet.Declare(String)
+V.Local.sSql.Declare(String)
+V.Local.iC.Declare(Long)
+v.Local.sRetStr.declare(String)
+
+Function.Intrinsic.UI.InvokeWaitDialog("Processing ...")
+
+
+F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+F.Intrinsic.UI.Browser(100,"",V.Local.sRet)
+
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	'enable the add button
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+
+	gui.F_ForeignPts.txtPart.Text(V.Local.sRet(0))
+	gui.F_ForeignPts.txtRev.Text(V.Local.sRet(1))
+	gui.F_ForeignPts.txtLoc.Text(V.Local.sRet(2))
+
+
+	V.Local.sSql.Set("select Part,Rev,Loc,HTSUS_No,HTSUS_Rate,HTSUS_Desc,HTSUS_Weight,Conversion_Factor,HTSUS_UM,AD_CVD_Case,AD_CVD_Rate,Form_ID,Origin_Country,Loc_Code,Zone_Status from GCG_3613_ForeignPart ")
+	f.Intrinsic.String.Build("{0} where part = '{1}' and rev = '{2}' and loc = '{3}' ",V.Local.sSql,V.Local.sRet(0),V.Local.sRet(1),V.Local.sRet(2),V.Local.sSql)
+
+	F.ODBC.Connection!conx.OpenLocalRecordsetRO("rstPart",v.Local.sSql)
+	F.Intrinsic.Control.If(v.ODBC.conx!rstPart.EOF,=,False)
+		F.Intrinsic.UI.Msgbox("This part exists in the Grid")
+		gui.F_ForeignPts.txtHTSUSNo.text(v.ODBC.conx!rstPart.FieldValtrim!HTSUS_No)
+		gui.F_ForeignPts.txtHTSUSRate.text(v.ODBC.conx!rstPart.FieldVal!HTSUS_Rate)
+		gui.F_ForeignPts.txtHTSUSDesc.text(v.ODBC.conx!rstPart.FieldValTrim!HTSUS_Desc)
+		gui.F_ForeignPts.txtHTSUSUM.text(v.ODBC.conx!rstPart.FieldValTrim!HTSUS_UM)
+		gui.F_ForeignPts.txtADCVDCase.text(v.ODBC.conx!rstPart.FieldValTrim!AD_CVD_Case)
+		gui.F_ForeignPts.txtCountry.text(v.ODBC.conx!rstPart.FieldVal!Origin_Country)
+		gui.F_ForeignPts.txtHTSUSWeight.text(v.ODBC.conx!rstPart.FieldVal!HTSUS_Weight)
+		gui.F_ForeignPts.txtConvFact.text(v.ODBC.conx!rstPart.FieldVal!Conversion_Factor)
+		gui.F_ForeignPts.txtFormID.text(v.ODBC.conx!rstPart.FieldValTrim!Form_ID)
+		gui.F_ForeignPts.txtADCVDRate.text(v.ODBC.conx!rstPart.FieldVal!AD_CVD_Rate)
+		gui.F_ForeignPts.txtLocCode.text(v.ODBC.conx!rstPart.FieldValTrim!Loc_Code)
+
+		'to reterive
+		V.Local.sRetStr.set(v.ODBC.conx!rstPart.FieldVal!Zone_Status)
+		Function.Intrinsic.String.Trim(V.Local.sRetStr, V.Local.sRetStr)
+		F.Intrinsic.String.Split(V.Local.sRetStr, " ", V.Local.sRetStr)
+		F.Intrinsic.Control.For(V.Local.iC, 0, V.Local.sRetStr.UBound,1)
+			Function.Intrinsic.Control.If(V.Local.sRetStr(V.Local.iC), <>,"")
+				Function.Intrinsic.Control.SelectCase(V.Local.sRetStr(V.Local.iC))
+					Function.Intrinsic.Control.Case("NPF")
+						gui.F_ForeignPts.chkNPF.Value(1)
+					Function.Intrinsic.Control.Case("PF")
+						gui.F_ForeignPts.chkPF.value(1)
+					Function.Intrinsic.Control.Case("D")
+						gui.F_ForeignPts.chkD.value(1)
+					Function.Intrinsic.Control.Case("ZR")
+					gui.F_ForeignPts.chkZR.value(1)
+				Function.Intrinsic.Control.EndSelect
+			Function.Intrinsic.Control.EndIf
+		F.Intrinsic.Control.Next(V.Local.iC)
+	F.Intrinsic.Control.Else
+
+		gui.F_ForeignPts.txtHTSUSNo.text("")
+		gui.F_ForeignPts.txtHTSUSRate.text("")
+		gui.F_ForeignPts.txtHTSUSDesc.text("")
+		gui.F_ForeignPts.txtHTSUSUM.text("")
+		gui.F_ForeignPts.txtADCVDCase.text("")
+		gui.F_ForeignPts.txtCountry.text("")
+		gui.F_ForeignPts.txtHTSUSWeight.text("")
+		gui.F_ForeignPts.txtConvFact.text("")
+		gui.F_ForeignPts.txtFormID.text("")
+		gui.F_ForeignPts.txtADCVDRate.text("")
+		gui.F_ForeignPts.txtLocCode.text("")		
+
+
+		gui.F_ForeignPts.chkNPF.Value(False)
+		gui.F_ForeignPts.chkPF.value(False)
+		gui.F_ForeignPts.chkD.value(False)
+		gui.F_ForeignPts.chkZR.value(False)
+		
+	F.Intrinsic.Control.EndIf
+	f.ODBC.conx!rstPart.Close 
+F.Intrinsic.Control.EndIf
+
+Function.Intrinsic.UI.CloseWaitDialog
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.cmdBrowse_Click.End
+
+Program.Sub.F_ForeignPts_UnLoad.Start
+F.Intrinsic.Control.SetErrorHandler("Loaddata_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+	f.data.datatable.close("Part")
+	F.ODBC.Connection!conX.Close
+
+	F.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Loaddata_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.F_ForeignPts_UnLoad.End
+
+Program.Sub.Loaddata.Start
+F.Intrinsic.Control.SetErrorHandler("Loaddata_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.sSql.Declare(String)
+
+
+V.Local.sSql.Set("select Part,Rev,Loc,HTSUS_No,HTSUS_Rate,HTSUS_Desc,HTSUS_Weight,Conversion_Factor,HTSUS_UM,AD_CVD_Case,AD_CVD_Rate,Form_ID,Origin_Country,Loc_Code,Zone_Status from GCG_3613_ForeignPart")
+Function.data.DataTable.CreateFromSQL("Part","conx",v.Local.sSql,True)
+
+Gui.F_ForeignPts.GsGridControl1.Datasource("Part")
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Loaddata_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Loaddata.End
+
+Program.Sub.cmdADD_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdBrowse_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.sFilter.Declare(String)
+V.Local.lRow.Declare(long)
+v.Local.chkvalue.Declare(String)
+
+
+GUI.F_ForeignPts.cmdADD.Enabled(False)
+'check all text boxes were filled in
+f.Intrinsic.Control.If(v.Screen.F_ForeignPts!txtPart.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtPart.SetFocus
+	f.Intrinsic.Control.ExitSub 
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtHTSUSNo.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtHTSUSNo.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtHTSUSRate.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtHTSUSRate.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtHTSUSDesc.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtHTSUSDesc.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtHTSUSWeight.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtHTSUSWeight.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtConvFact.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtConvFact.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtHTSUSUM.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtHTSUSUM.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtADCVDCase.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtADCVDCase.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtADCVDRate.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtADCVDRate.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtFormID.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtFormID.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtCountry.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtCountry.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.elseIf(v.Screen.F_ForeignPts!txtLocCode.text.trim,=,"")
+	f.Intrinsic.UI.Msgbox("Invalid Data")
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	gui.F_ForeignPts.txtLocCode.SetFocus
+	f.Intrinsic.Control.ExitSub
+f.Intrinsic.Control.EndIf 
+
+
+'check numeric fields are correct
+Function.Intrinsic.Control.CallSub(check_numbers)
+Function.Intrinsic.Control.If(V.Global.iNum, =, 1)
+	V.Global.iNum.set(0)
+	GUI.F_ForeignPts.cmdADD.Enabled(TRUE)
+	f.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+
+
+' check if part choosen already exists in the table
+f.Intrinsic.String.Build("Part = '{0}' and Rev = '{1}' and Loc = '{2}'" ,v.Screen.F_ForeignPts!txtPart.text,v.Screen.F_ForeignPts!txtRev.text,v.Screen.F_ForeignPts!txtloc.text,V.Local.sFilter)
+F.Data.DataView.Create("Part","PartView",22, v.Local.sFilter,"part asc")
+F.Data.DataView.ToDataTable("Part","PartView","PartTemp")
+V.Local.lRow.set(-1)
+V.Local.lRow.Set(v.datatable.Parttemp.rowcount)
+F.Data.DataTable.Close("PartTemp")
+f.Intrinsic.Control.If(V.Local.lRow,>,0)
+	V.Local.lRow.Set(v.DataView.Part!PartView(0).DataTableIndex)
+	f.Intrinsic.Control.If(V.Local.lRow,>=,0)
+		F.Data.DataTable.DeleteRow("Part",V.Local.lRow)
+	f.Intrinsic.Control.EndIf 
+f.Intrinsic.Control.EndIf 
+
+'set the check-box value
+V.Local.chkvalue.set("")
+f.Intrinsic.Control.if(v.Screen.F_ForeignPts!chkNPF.Value,=,1)
+	v.Local.chkvalue.set("NPF")
+f.Intrinsic.Control.endif
+f.Intrinsic.Control.if(v.Screen.F_ForeignPts!chkPF.Value,=,1)
+	F.Intrinsic.String.Build("{0} PF",v.Local.chkvalue, v.Local.chkvalue )
+f.Intrinsic.Control.endif
+f.Intrinsic.Control.if(v.Screen.F_ForeignPts!chkD.Value,=,1)
+	F.Intrinsic.String.Build("{0} D",v.Local.chkvalue, v.Local.chkvalue )
+f.Intrinsic.Control.endif
+f.Intrinsic.Control.if(v.Screen.F_ForeignPts!chkZR.Value,=,1)
+	F.Intrinsic.String.Build("{0} ZR",v.Local.chkvalue, v.Local.chkvalue )
+f.Intrinsic.Control.endif
+
+F.Data.DataTable.AddRow("Part","Part",v.Screen.F_ForeignPts!txtPart.text,"Rev",v.Screen.F_ForeignPts!txtRev.text,"Loc",v.Screen.F_ForeignPts!txtloc.text,"HTSUS_No",v.Screen.F_ForeignPts!txtHTSUSNo.text,"HTSUS_Rate",v.Screen.F_ForeignPts!txtHTSUSRate.text,"HTSUS_Desc",v.Screen.F_ForeignPts!txtHTSUSDesc.text,"HTSUS_Weight",v.Screen.F_ForeignPts!txtHTSUSWeight.text,"Conversion_Factor",v.Screen.F_ForeignPts!txtConvFact.text,"HTSUS_UM",v.Screen.F_ForeignPts!txtHTSUSUM.text,"AD_CVD_Case",v.Screen.F_ForeignPts!txtADCVDCase.text,"AD_CVD_Rate",v.Screen.F_ForeignPts!txtADCVDRate.text,"Form_ID",v.Screen.F_ForeignPts!txtFormID.text,"Origin_Country",v.Screen.F_ForeignPts!txtCountry.text,"Loc_Code",v.Screen.F_ForeignPts!txtLocCode.text,"Zone_Status",v.Local.chkvalue)
+
+
+F.Data.DataTable.SaveToDB("Part","conx","GCG_3613_ForeignPart","Part*!*Rev*!*Loc",256)
+
+f.data.dataview.close("Part","PartView")
+
+
+gui.F_ForeignPts.txtPart.Text("")
+gui.F_ForeignPts.txtRev.Text("")
+gui.F_ForeignPts.txtLoc.Text("")
+
+gui.F_ForeignPts.txtHTSUSNo.text("")
+gui.F_ForeignPts.txtHTSUSRate.text("")
+gui.F_ForeignPts.txtHTSUSDesc.text("")
+gui.F_ForeignPts.txtHTSUSUM.text("")
+gui.F_ForeignPts.txtADCVDCase.text("")
+gui.F_ForeignPts.txtCountry.text("")
+gui.F_ForeignPts.txtHTSUSWeight.text("")
+gui.F_ForeignPts.txtConvFact.text("")
+gui.F_ForeignPts.txtFormID.text("")
+gui.F_ForeignPts.txtADCVDRate.text("")
+gui.F_ForeignPts.txtLocCode.text("")		
+
+gui.F_ForeignPts.chkNPF.Value(False)
+gui.F_ForeignPts.chkPF.value(False)
+gui.F_ForeignPts.chkD.value(False)
+gui.F_ForeignPts.chkZR.value(False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdBrowse_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.cmdADD_Click.End
+
+Program.Sub.cmdRemove_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdRemove_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+Function.Intrinsic.Control.If(V.Global.iRow, =, -1)
+	F.Intrinsic.UI.Msgbox("Choose A Row To Remove")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.Else
+	Function.Data.DataTable.DeleteRow("PART", V.Global.iRow)
+	F.Data.DataTable.SaveToDB("Part","conx","GCG_3613_ForeignPart","Part*!*Rev*!*Loc",7)
+	V.Global.iRow.Set(-1)
+Function.Intrinsic.Control.EndIf
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdRemove_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.cmdRemove_Click.End
+
+Program.Sub.GsGridControl1_RowClick.Start
+F.Intrinsic.Control.SetErrorHandler("GsGridControl1_RowClick_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+V.Global.iRow.Set(V.Args.RowIndex)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("GsGridControl1_RowClick_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.GsGridControl1_RowClick.End
+
+Program.Sub.Check_Numbers.Start
+F.Intrinsic.Control.SetErrorHandler("Check_Numbers_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+Variable.local.bNo.Declare(Boolean)
+
+
+'first check the fields are numeric
+Function.Intrinsic.Math.IsNumeric(v.Screen.F_ForeignPts!txtHTSUSRate.text.trim, Variable.local.bNo)
+Function.Intrinsic.Control.If(variable.local.bNo, = , FALSE)
+	F.Intrinsic.UI.Msgbox("HTSUS RATE must be Numeric")
+	V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Math.IsNumeric(v.Screen.F_ForeignPts!txtHTSUSWeight.text.trim, Variable.local.bNo)
+Function.Intrinsic.Control.If(variable.local.bNo, = , FALSE)
+	F.Intrinsic.UI.Msgbox("HTSUS Weight must be Numeric")
+	V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Math.IsNumeric(v.Screen.F_ForeignPts!txtConvFact.text.trim, Variable.local.bNo)
+Function.Intrinsic.Control.If(variable.local.bNo, = , FALSE)
+	F.Intrinsic.UI.Msgbox("Conversion Factor must be Numeric")
+	V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Math.IsNumeric(v.Screen.F_ForeignPts!txtADCVDRate.text.trim, Variable.local.bNo)
+Function.Intrinsic.Control.If(variable.local.bNo, = , FALSE)
+	F.Intrinsic.UI.Msgbox("ADCVD RATE must be Numeric")
+	V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+'check the fields are less than max value
+Function.Intrinsic.Control.If(v.Screen.F_ForeignPts!txtHTSUSRate.text.trim, >, 9999.9999)
+		F.Intrinsic.UI.Msgbox("HTSUS RATE must be less than 9999.9999")
+		V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Control.If(v.Screen.F_ForeignPts!txtHTSUSWeight.text.trim, >, 9999.9999)
+		F.Intrinsic.UI.Msgbox("HTSUS Weight must be less than 9999.9999")
+		V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Control.If(v.Screen.F_ForeignPts!txtConvFact.text.trim, >, 999999.99999999)
+		F.Intrinsic.UI.Msgbox("Conversion Factor must be less than 999999.99999999")
+		V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Control.If(v.Screen.F_ForeignPts!txtADCVDRate.text.trim, >, 9999.9999)
+	F.Intrinsic.UI.Msgbox("ADCVD RATE must be less than 9999.9999")
+	V.Global.iNum.set(1)
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Check_Numbers_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_ForeignPrtsScreen.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_foreignpts_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Check_Numbers.End
+
+Program.Sub.Comments.Start
+${$0$}$Foreign Parts Screen$}$SISCO$}$7/5/2016 8:05:21 AM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a screen for the foreign part screen of the Freight Trade Zone project.
+Program.Sub.Comments.End
