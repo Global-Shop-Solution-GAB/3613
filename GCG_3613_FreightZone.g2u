@@ -1,0 +1,1165 @@
+Program.Sub.ScreenSU.Start
+Gui.F_FreightZone..Create
+Gui.F_FreightZone..Caption("Freight Zone")
+Gui.F_FreightZone..Size(15000,12480)
+Gui.F_FreightZone..MinX(0)
+Gui.F_FreightZone..MinY(0)
+Gui.F_FreightZone..Position(0,0)
+Gui.F_FreightZone..BackColor(-2147483633)
+Gui.F_FreightZone..MousePointer(0)
+Gui.F_FreightZone..Event(UnLoad,F_FreightZone_UnLoad)
+Gui.F_FreightZone.lblZoneAd.Create(Label,"Zone Admission",True,1935,255,0,255,195,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblInBond.Create(Label,"In Bond No.",True,1005,255,0,255,1005,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblBOL.Create(Label,"Bill of Lading",True,1935,255,0,1755,1005,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblCBPNo.Create(Label,"CBP Seal No.",True,1245,255,0,5295,1005,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblPackages.Create(Label,"# of Packages",True,1500,255,0,6795,1005,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblUSPOU.Create(Label,"US POU",True,1245,255,0,255,1650,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblFGPOU.Create(Label,"FG POU",True,1245,255,0,1755,1650,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblImpCarr.Create(Label,"Import Carrier",True,1245,255,0,3255,1650,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblBonCarr.Create(Label,"Bonded Carrier",True,1245,255,0,4755,1650,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblExp.Create(Label,"Export Date",True,1500,255,0,6255,1650,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblImport.Create(Label,"Import Date",True,1935,255,0,8055,1650,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblContainer.Create(Label,"Container",True,1935,255,0,255,2505,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblCont.Create(Label,"Container",False,1245,255,0,255,3255,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblPONo.Create(Label,"Purchase Order",False,1455,255,0,1755,3255,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblManID.Create(Label,"Manufacture ID",False,1455,255,0,3255,3255,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblEstID.Create(Label,"Establishment ID",False,1455,255,0,4755,3255,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblInvNo.Create(Label,"Invoice No.",False,1935,255,0,6555,3255,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblDutVal.Create(Label,"Dutiable Value",False,1245,255,0,255,3900,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.lblHarbFee.Create(Label,"Harbor Fee",False,1500,255,0,1755,3900,True,0,"Arial",8,-2147483633,0)
+Gui.F_FreightZone.ddlZoneAdNum.Create(DropDownList)
+Gui.F_FreightZone.ddlZoneAdNum.Size(2505,330)
+Gui.F_FreightZone.ddlZoneAdNum.Position(255,405)
+Gui.F_FreightZone.ddlZoneAdNum.Event(Click,ddlZoneAdNum_Change)
+Gui.F_FreightZone.cmdNewNumb.Create(Button)
+Gui.F_FreightZone.cmdNewNumb.Size(945,375)
+Gui.F_FreightZone.cmdNewNumb.Position(3000,405)
+Gui.F_FreightZone.cmdNewNumb.Caption("New")
+Gui.F_FreightZone.cmdNewNumb.Event(Click,cmdNewNumb_Click)
+Gui.F_FreightZone.txtInBondNo.Create(TextBox,"",True,1215,300,0,255,1200,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtInBondNo.MaxLength(25)
+Gui.F_FreightZone.txtInBondNo.ControlGroup(1)
+Gui.F_FreightZone.txtBOL.Create(TextBox,"",True,3255,300,0,1755,1200,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtBOL.MaxLength(35)
+Gui.F_FreightZone.txtBOL.ControlGroup(1)
+Gui.F_FreightZone.txtCBP.Create(TextBox,"",True,1215,300,0,5295,1200,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtCBP.MaxLength(10)
+Gui.F_FreightZone.txtCBP.ControlGroup(1)
+Gui.F_FreightZone.txtPackages.Create(TextBox,"",True,1215,300,0,6795,1200,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtPackages.NumericOnly(True)
+Gui.F_FreightZone.txtPackages.ControlGroup(1)
+Gui.F_FreightZone.txtUSPOU.Create(TextBox,"",True,1215,300,0,255,1845,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtUSPOU.MaxLength(5)
+Gui.F_FreightZone.txtUSPOU.ControlGroup(1)
+Gui.F_FreightZone.txtFGPOU.Create(TextBox,"",True,1215,300,0,1755,1845,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtFGPOU.MaxLength(5)
+Gui.F_FreightZone.txtFGPOU.ControlGroup(1)
+Gui.F_FreightZone.txtImpCarr.Create(TextBox,"",True,1215,300,0,3255,1845,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtImpCarr.MaxLength(20)
+Gui.F_FreightZone.txtImpCarr.ControlGroup(1)
+Gui.F_FreightZone.txtBonCarr.Create(TextBox,"",True,1215,300,0,4755,1845,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtBonCarr.MaxLength(12)
+Gui.F_FreightZone.txtBonCarr.ControlGroup(1)
+Gui.F_FreightZone.dtpExport.Create(DatePicker)
+Gui.F_FreightZone.dtpExport.Size(1500,285)
+Gui.F_FreightZone.dtpExport.Position(6255,1845)
+Gui.F_FreightZone.dtpImport.Create(DatePicker)
+Gui.F_FreightZone.dtpImport.Size(1500,285)
+Gui.F_FreightZone.dtpImport.Position(8055,1845)
+Gui.F_FreightZone.txtCont.Create(TextBox,"",True,2505,300,0,255,2700,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtCont.ControlGroup(2)
+Gui.F_FreightZone.cmdBrowser.Create(Button)
+Gui.F_FreightZone.cmdBrowser.Size(375,375)
+Gui.F_FreightZone.cmdBrowser.Position(2895,2655)
+Gui.F_FreightZone.cmdBrowser.Caption("^")
+Gui.F_FreightZone.cmdBrowser.Event(Click,cmdBrowser_Click)
+Gui.F_FreightZone.txtContNo.Create(TextBox,"",False,1215,300,0,255,3450,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtContNo.ControlGroup(2)
+Gui.F_FreightZone.txtPO.Create(TextBox,"",False,1215,300,0,1755,3450,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtPO.ControlGroup(2)
+Gui.F_FreightZone.txtManID.Create(TextBox,"",False,1215,300,0,3255,3450,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtManID.ControlGroup(2)
+Gui.F_FreightZone.txtEstabID.Create(TextBox,"",False,1500,300,0,4755,3450,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtEstabID.ControlGroup(2)
+Gui.F_FreightZone.txtInvNo.Create(TextBox,"",False,1215,300,0,6555,3450,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtInvNo.ControlGroup(2)
+Gui.F_FreightZone.txtDutiVal.Create(TextBox,"",False,1215,300,0,255,4095,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtDutiVal.ControlGroup(2)
+Gui.F_FreightZone.txtHarbFee.Create(TextBox,"",False,1215,300,0,1755,4095,True,0,"Arial",8,-2147483643,1)
+Gui.F_FreightZone.txtHarbFee.ControlGroup(2)
+Gui.F_FreightZone.chkAirF.Create(CheckBox)
+Gui.F_FreightZone.chkAirF.Size(1560,360)
+Gui.F_FreightZone.chkAirF.Position(8430,1170)
+Gui.F_FreightZone.chkAirF.Caption("Air Freight")
+Gui.F_FreightZone.chkAirF.Event(Click,chkAirF_Click)
+Gui.F_FreightZone.chkAirF.ControlGroup(1)
+Gui.F_FreightZone.cmdAdd.Create(Button)
+Gui.F_FreightZone.cmdAdd.Size(855,375)
+Gui.F_FreightZone.cmdAdd.Position(255,4590)
+Gui.F_FreightZone.cmdAdd.Caption("Add")
+Gui.F_FreightZone.cmdAdd.Visible(False)
+Gui.F_FreightZone.ggcContainer.Create(GsGridControl)
+Gui.F_FreightZone.ggcContainer.Size(9750,2505)
+Gui.F_FreightZone.ggcContainer.Position(135,3225)
+Gui.F_FreightZone.ggcContainer.Event(RowCellClick,ggcContainer_RowCellClick)
+Gui.F_FreightZone.ggcContainer.Event(CellValueChanged,ggcContainer_CellValueChanged)
+Gui.F_FreightZone.ggcParts.Create(GsGridControl)
+Gui.F_FreightZone.ggcParts.Size(14505,2745)
+Gui.F_FreightZone.ggcParts.Position(105,5940)
+Gui.F_FreightZone.ggcAddl.Create(GsGridControl)
+Gui.F_FreightZone.ggcAddl.Size(14505,2745)
+Gui.F_FreightZone.ggcAddl.Position(60,8970)
+Gui.F_FreightZone.cmdSave.Create(Button)
+Gui.F_FreightZone.cmdSave.Size(945,375)
+Gui.F_FreightZone.cmdSave.Position(4155,405)
+Gui.F_FreightZone.cmdSave.Caption("Save")
+Gui.F_FreightZone.cmdSave.Event(Click,cmdSave_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Variable.Global.uGrid.Declare(String)
+Variable.Global.uCont.Declare(String)
+Variable.Global.uPO.Declare(String)
+Variable.Global.sPrevZone.Declare(String)
+Variable.Global.uTable.Declare(Boolean,False)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+v.Local.sSql.declare(String)
+Gui.F_FreightZone.txtInBondNo.defaultValue("")
+Gui.F_FreightZone.txtBOL.defaultValue("")
+Gui.F_FreightZone.txtCBP.defaultValue("")
+Gui.F_FreightZone.txtPackages.defaultValue("0")
+Gui.F_FreightZone.txtUSPOU.defaultValue("")
+Gui.F_FreightZone.txtFGPOU.defaultValue("")
+Gui.F_FreightZone.txtImpCarr.defaultValue("")
+Gui.F_FreightZone.txtBonCarr.defaultValue("")
+'Gui.F_FreightZone.chkAirF.defaultValue(0)
+Gui.F_FreightZone.txtCont.defaultValue("")
+Gui.F_FreightZone.txtContNo.defaultValue("")
+Gui.F_FreightZone.txtPO.defaultValue("")
+Gui.F_FreightZone.txtManID.defaultValue("")
+Gui.F_FreightZone.txtEstabID.defaultValue("")
+Gui.F_FreightZone.txtInvNo.defaultValue("")
+Gui.F_FreightZone.txtDutiVal.defaultValue("")
+Gui.F_FreightZone.txtHarbFee.defaultValue("")
+Function.ODBC.Connection!con.OpenConnection(Variable.Ambient.PDSN, Variable.Ambient.PUser, Variable.Ambient.PPass)
+
+F.Data.Dictionary.CreateFromSQL("Zone", "con", "Select ZONE_ADMISSION, ZONE_ADMISSION  from GCG_3613_FREIGHTZONE")
+F.Data.Dictionary.SetDefaultReturn("Zone", "")
+Gui.F_FreightZone.ddlZoneAdNum.AddItems("Dictionary", "Zone")
+
+'************************** SKC
+'Function.ODBC.Connection!con.OpenLocalRecordsetRO("rst0", "Select ZONE_ADMISSION from GCG_3613_FREIGHTZONE")
+'Function.Intrinsic.Control.DoUntil(Variable.ODBC.con!rst0.EOF, =, True)
+'	Gui.F_FreightZone.ddlZoneAdNum.AddItem(Variable.ODBC.con!rst0.FieldValTrim!ZONE_ADMISSION)
+'	Function.ODBC.con!rst0.MoveNext
+'Function.Intrinsic.Control.Loop
+'************************** SKC
+Function.Intrinsic.Control.CallSub(lock)
+Function.Intrinsic.Control.CallSub(datatable)
+Function.Intrinsic.Control.CallSub(createtables)
+Gui.F_FreightZone..Show
+'Function.Intrinsic.Control.CallSub(zonepartsave)
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Main.End
+
+Program.Sub.Unlock.Start
+F.Intrinsic.Control.SetErrorHandler("Unlock_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Gui.F_FreightZone.txtInBondNo.Enabled(True)
+Gui.F_FreightZone.txtBOL.Enabled(True)
+Gui.F_FreightZone.txtCBP.Enabled(True)
+Gui.F_FreightZone.txtPackages.Enabled(True)
+Gui.F_FreightZone.txtUSPOU.Enabled(True)
+Gui.F_FreightZone.txtFGPOU.Enabled(True)
+Gui.F_FreightZone.txtImpCarr.Enabled(True)
+Gui.F_FreightZone.txtBonCarr.Enabled(True)
+Gui.F_FreightZone.dtpExport.Enabled(True)
+Gui.F_FreightZone.dtpImport.Enabled(True)
+Gui.F_FreightZone.cmdBrowser.Enabled(True)
+Gui.F_FreightZone.txtContNo.Enabled(True)
+Gui.F_FreightZone.txtPO.Enabled(True)
+Gui.F_FreightZone.txtManID.Enabled(True)
+Gui.F_FreightZone.txtEstabID.Enabled(True)
+Gui.F_FreightZone.txtInvNo.Enabled(True)
+Gui.F_FreightZone.txtDutiVal.Enabled(True)
+Gui.F_FreightZone.txtHarbFee.Enabled(True)
+Gui.F_FreightZone.chkAirF.Enabled(True)
+Gui.F_FreightZone.cmdAdd.Enabled(True)
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("Unlock_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Unlock.End
+
+Program.Sub.Lock.Start
+F.Intrinsic.Control.SetErrorHandler("Lock_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Gui.F_FreightZone.txtInBondNo.Enabled(False)
+Gui.F_FreightZone.txtBOL.Enabled(False)
+Gui.F_FreightZone.txtCBP.Enabled(False)
+Gui.F_FreightZone.txtPackages.Enabled(False)
+Gui.F_FreightZone.txtUSPOU.Enabled(False)
+Gui.F_FreightZone.txtFGPOU.Enabled(False)
+Gui.F_FreightZone.txtImpCarr.Enabled(False)
+Gui.F_FreightZone.txtBonCarr.Enabled(False)
+Gui.F_FreightZone.dtpExport.Enabled(False)
+Gui.F_FreightZone.dtpImport.Enabled(False)
+Gui.F_FreightZone.txtCont.Enabled(False)
+Gui.F_FreightZone.cmdBrowser.Enabled(False)
+Gui.F_FreightZone.txtContNo.Enabled(False)
+Gui.F_FreightZone.txtPO.Enabled(False)
+Gui.F_FreightZone.txtManID.Enabled(False)
+Gui.F_FreightZone.txtEstabID.Enabled(False)
+Gui.F_FreightZone.txtInvNo.Enabled(False)
+Gui.F_FreightZone.txtDutiVal.Enabled(False)
+Gui.F_FreightZone.txtHarbFee.Enabled(False)
+Gui.F_FreightZone.chkAirF.Enabled(False)
+Gui.F_FreightZone.cmdAdd.Enabled(False)
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("Lock_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Lock.End
+
+Program.Sub.cmdNewNumb_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdNewNumb_Click_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sZAN.Declare(String)
+Variable.Local.sYr.Declare(String)
+
+'We get the last entry from the table
+Function.ODBC.Connection!con.OpenLocalRecordsetRW("rstn", "Select * from GCG_3613_FREIGHTZONE ")
+Function.Intrinsic.Control.If(V.ODBC.con!rstn.EOF, =, False)
+	Function.ODBC.con!rstn.MoveLast
+	Variable.Local.sZAN.Set(Variable.ODBC.con!rstn.FieldValTrim!ZONE_ADMISSION)
+	Function.Intrinsic.String.Right(Variable.Local.sZAN, 5, Variable.Local.sZAN)
+	Function.Intrinsic.Math.Add(Variable.Local.sZAN.Long, 1, Variable.Local.sZAN)
+F.Intrinsic.Control.Else
+	V.Local.sZAN.Set("1")
+F.Intrinsic.Control.EndIf
+Function.Intrinsic.String.LPad(Variable.Local.sZAN, "0", 5, Variable.Local.sZAN)
+Variable.Local.sYr.Set(Variable.Ambient.Date)
+Function.Intrinsic.String.Split(Variable.Local.sYr, " ", Variable.Local.sYr)
+Function.Intrinsic.String.Right(Variable.Local.sYr(0), 2, Variable.Local.sYr(0))
+Function.Intrinsic.String.Build("1020E01{0}{1}{2}",  Variable.Local.sYr(0), Variable.Caller.CompanyCode, Variable.Local.sZAN, Variable.Local.sZAN)
+Gui.F_FreightZone.ddlZoneAdNum.AddItem(Variable.Local.sZAN)
+Gui.F_FreightZone.ddlZoneAdNum.Text(Variable.Local.sZAN)
+Function.ODBC.con!rstn.AddNew
+Function.ODBC.con!rstn.Set!ZONE_ADMISSION(Variable.Local.sZAN)
+Function.ODBC.con!rstn.Set!EXPORT_DATE(Variable.Screen.F_FreightZone!dtpExport.Value)
+Function.ODBC.con!rstn.Set!IMPORT_DATE(Variable.Screen.F_FreightZone!dtpImport.Value)
+F.ODBC.con!rstn.Set!AIR_FREIGHT(False)
+Function.ODBC.con!rstn.Update
+Function.ODBC.con!rstn.Close
+'Unlock fields and blank them out for information entry
+Function.Intrinsic.Control.CallSub(unlock)
+Gui.F_FreightZone..ClearGroup(1)
+Gui.F_FreightZone..ClearGroup(2)
+Gui.F_FreightZone.chkAirF.Value(0)
+
+'******************************** SKC
+'Gui.F_FreightZone.txtInBondNo.Text("")
+'Gui.F_FreightZone.txtBOL.Text("")
+'Gui.F_FreightZone.txtCBP.Text("")
+'Gui.F_FreightZone.txtPackages.Text("0")
+'Gui.F_FreightZone.txtUSPOU.Text("")
+'Gui.F_FreightZone.txtFGPOU.Text("")
+'Gui.F_FreightZone.txtImpCarr.Text("")
+'Gui.F_FreightZone.txtBonCarr.Text("")
+'Gui.F_FreightZone.chkAirF.Value(0)
+'Gui.F_FreightZone.txtCont.Text("")
+'Gui.F_FreightZone.txtContNo.Text("")
+'Gui.F_FreightZone.txtPO.Text("")
+'Gui.F_FreightZone.txtManID.Text("")
+'Gui.F_FreightZone.txtEstabID.Text("")
+'Gui.F_FreightZone.txtInvNo.Text("")
+'Gui.F_FreightZone.txtDutiVal.Text("")
+'Gui.F_FreightZone.txtHarbFee.Text("")
+'******************************** SKC
+F.Intrinsic.Control.CallSub(cmdsave_click)
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("cmdNewNumb_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdNewNumb_Click.End
+
+Program.Sub.cmdBrowser_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdBrowser_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+Variable.Local.sRet.Declare(String)
+Variable.Local.sTitles.Declare(String)
+Variable.Local.sWidths.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sZone.Declare(String)
+Variable.Local.sZoneO.Declare(String)
+Variable.Local.sCont.Declare(String)
+Variable.Local.sPO.Declare(String)
+Variable.Local.sVend.Declare(String)
+Variable.Local.sMFG.Declare(String)
+Variable.Local.sEstsh.Declare(String)
+Variable.Local.sExp.Declare(String)
+Variable.Local.sCount.Declare(String)
+Variable.Local.iCount.Declare(String)
+
+Variable.Local.sZone.Set(Variable.Screen.F_FreightZone!ddlZoneAdNum.Text)
+
+Function.Intrinsic.Control.If(Variable.Local.sZone.Trim, =, "")
+	Function.Intrinsic.UI.Msgbox("Please select a Zone Admission", "No Zone Admission Selected")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+
+Function.Intrinsic.String.Split("Container*!*PO", "*!*", Variable.Local.sTitles)
+Function.Intrinsic.String.Split("1000*!*0", "*!*", Variable.Local.sWidths)
+
+'Create a browser for Containers and blank out data on the fields
+Function.Intrinsic.UI.MiniBrowser("Containers", "con", "Select distinct CONTAINER, Container from PO_CONTAINER", Variable.Local.sTitles, Variable.Local.sWidths, Variable.Local.sRet)
+
+Function.Intrinsic.Control.If(Variable.Local.sRet, !=, "***CANCEL***")
+	Function.Intrinsic.String.Split(Variable.Local.sRet, "*!*", Variable.Local.sRet)
+	Gui.F_FreightZone.txtCont.Text(Variable.Local.sRet(0).Trim)
+Function.Intrinsic.Control.EndIf
+
+Variable.Local.sCont.Set(Variable.Screen.F_FreightZone!txtCont.Text)
+
+'Find out if the Container is being used in another Zone
+Function.Intrinsic.String.Build("Select ZONE_ADMISSION from GCG_3613_CONTAINER where CONTAINER = '{0}' ", Variable.Local.sCont, Variable.Local.sSql)
+Function.ODBC.Connection!con.OpenLocalRecordsetRW("rstm", Variable.Local.sSql)
+Function.Intrinsic.Control.If(Variable.ODBC.con!rstm.EOF, <>, True)
+	Variable.Local.sZoneO.Set(Variable.ODBC.con!rstm.FieldValTrim!ZONE_ADMISSION)
+	'If found in table, figure out if it is being used in a different zone
+	Function.Intrinsic.Control.If(Variable.Local.sZoneO.Trim, <>, Variable.Local.sZone.Trim, "AND", Variable.Local.sZoneO.Trim, <>, "")
+		Function.Intrinsic.String.Build("This container is being used in Zone {0}. Would you like to move it to Zone {1}?", Variable.Local.sZoneO, Variable.Local.sZone, Variable.Local.sSql)
+		Function.Intrinsic.UI.Msgbox(Variable.Local.sSql, "Container already in use", 3, Variable.Local.sRet)
+		Function.Intrinsic.Control.If(Variable.Local.sRet.Trim, <>, 6)
+			Gui.F_FreightZone.txtCont.Text("")
+			Function.Intrinsic.Control.ExitSub
+		Function.Intrinsic.Control.EndIf
+	Function.Intrinsic.Control.EndIf
+	Function.Intrinsic.String.Build("Container = '{0}'", Variable.Local.sCont, Variable.Local.sExp)
+	Function.Data.DataTable.Select("Containers", Variable.Local.sExp, Variable.Local.sCount)
+	Function.Intrinsic.String.Split(Variable.Local.sCount, "*!*", Variable.Local.sCount)
+	Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.Local.sCount.UBound, 1)
+		Function.Data.DataTable.SetValue("Containers", Variable.Local.sCount(Variable.Local.iCount).Long, "ZONE_ADMISSION", Variable.Local.sZone)
+		Function.Data.DataTable.SetValue("RealOne", Variable.Local.sCount(Variable.Local.iCount).Long, "ZONE_ADMISSION", Variable.Local.sZone)
+	Function.Intrinsic.Control.Next(Variable.Local.iCount)
+Function.Intrinsic.Control.Else
+	'Go through PO_CONTAINER and add all entries with Container = Container into GCG_3613_Container
+	Function.ODBC.Connection!con.ExecuteAndReturn("Select Top 1 ESTID from GCG_3613_ESTID", Variable.Local.sEstsh)
+	Function.Intrinsic.String.Build("Select PO from PO_CONTAINER where CONTAINER = '{0}' ", Variable.Local.sCont, Variable.Local.sSql)
+	Function.ODBC.Connection!con.OpenLocalRecordsetRO("rstr", Variable.Local.sSql)
+	Function.Intrinsic.Control.DoUntil(Variable.ODBC.con!rstr.EOF, =, True)
+		Variable.Local.sPO.Set(Variable.ODBC.con!rstr.FieldValTrim!PO)
+		Function.Intrinsic.String.Build("Select VENDOR from V_PO_HEADER where PURCHASE_ORDER = '{0}' ", Variable.Local.sPO.Trim, Variable.Local.sSql)
+		Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sVend)
+		Function.Intrinsic.String.Build("Select MFGID from GCG_3613_MFGID where Vendor = '{0}' ", Variable.Local.sVend.Trim, Variable.Local.sSql)
+		Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sMFG)
+		'Add the data to both the RealOne and Containers Data Tables
+		Function.Data.DataTable.AddRow("Containers", "Container", Variable.Local.sCont, "PO #",Variable.Local.sPO , "Manufacture ID", Variable.Local.sMFG, "Estab. ID", Variable.Local.sEstsh, "ZONE_ADMISSION", Variable.Local.sZone)
+		Function.Data.DataTable.AddRow("RealOne", "Container", Variable.Local.sCont, "PURCHASE_ORDER",Variable.Local.sPO , "ZONE_ADMISSION", Variable.Local.sZone)
+		Function.ODBC.con!rstr.MoveNext
+	Function.Intrinsic.Control.Loop
+	Function.ODBC.con!rstr.Close
+Function.Intrinsic.Control.EndIf
+Function.ODBC.con!rstm.Close
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdBrowser_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.cmdBrowser_Click.End
+
+Program.Sub.ddlZoneAdNum_Change.Start
+F.Intrinsic.Control.SetErrorHandler("ddlZoneAdNum_Change_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sZone.Declare(String)
+Variable.Local.sEstsh.Declare(String)
+Variable.Local.sPO.Declare(String)
+Variable.Local.sVend.Declare(String)
+Variable.Local.sMFG.Declare(String)
+Variable.Local.sFilter.Declare(String)
+Variable.Local.sDataView.Declare(String)
+Variable.Local.iSize.Declare(Long)
+Variable.Local.iCount.Declare(Long)
+Variable.Local.dToday.Declare(Date)
+Variable.Local.dExp.Declare(Date)
+Variable.Local.dImp.Declare(Date)
+Variable.Local.sZone.Set(Variable.Screen.F_FreightZone!ddlZoneAdNum.Text)
+
+Function.Intrinsic.Control.If(Variable.Local.sZone, <>, "")
+	Function.Intrinsic.String.Build("ZONE_ADMISSION = '{0}'", Variable.Local.sZone, Variable.Local.sFilter)
+Function.Intrinsic.Control.Else
+	Function.Intrinsic.UI.Msgbox("Please select a Zone", "No Zone Selected")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Variable.Local.sDataView.Set(Variable.Local.sZone)
+Function.Intrinsic.Control.If(Variable.DataView.Containers![Variable.Local.sDataView].Exists, =, False)
+	Function.Data.DataView.Create("Containers", Variable.Local.sDataView, 22, Variable.Local.sFilter, "Container ASC")
+	Gui.F_FreightZone.ggcContainer.AddGridViewFromDataview(Variable.Local.sDataView, "Containers", Variable.Local.sDataView)
+Function.Intrinsic.Control.EndIf
+Gui.F_FreightZone.ggcContainer.MainView(Variable.Local.sDataView)
+Gui.F_FreightZone.ggcContainer.ColumnEdit(Variable.Local.sDataView, "Remove", "EditorButton", "Remove")
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"ZONE_ADMISSION", "Visible", False)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"VENDOR", "Visible", False)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"POKEY", "Visible", False)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Remove", "ReadOnly", True)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Remove", "AllowEdit", False)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Container", "ReadOnly", True)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"PO #", "ReadOnly", True)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"PO #", "AllowEdit", False)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Harbor Fee", "ReadOnly", True)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Manufacture ID", "ReadOnly", True)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Estab. ID", "ReadOnly", True)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Invoice #", "ReadOnly", False)
+Gui.F_FreightZone.ggcContainer.SetColumnProperty(Variable.Local.sDataView,"Dutiable Value", "ReadOnly", False)
+Variable.Global.uGrid.Set(Variable.Local.sDataView)
+Function.Intrinsic.Control.CallSub(unlock)
+Function.Intrinsic.Control.CallSub(popzone)	
+Function.Data.DataTable.DeleteRow("Parts")
+Function.Data.DataTable.DeleteRow("Addl")
+'************************* SKC
+'Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.DataTable.Parts.RowCount--, 1)
+'	Function.Data.DataTable.DeleteRow("Parts", 0)
+'	Function.Data.DataTable.DeleteRow("Addl", 0)
+'Function.Intrinsic.Control.Next(Variable.Local.iCount)
+'************************* SKC
+Function.Intrinsic.Control.CallSub(savetables)
+V.Global.sPrevZone.Set(V.Local.sZone)
+
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("ddlZoneAdNum_Change_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.ddlZoneAdNum_Change.End
+
+Program.Sub.F_FreightZone_UnLoad.Start
+F.Intrinsic.Control.SetErrorHandler("F_FreightZone_UnLoad_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+V.Global.sPrevZone.Set(Variable.Screen.F_FreightZone!ddlZoneAdNum.Text)
+Function.Intrinsic.Control.CallSub(savetables)
+Function.Intrinsic.Control.CallSub(zpsprime)
+Function.ODBC.Connection!con.Close
+Function.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("F_FreightZone_UnLoad_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.End
+
+Function.Intrinsic.Control.EndIf
+Program.Sub.F_FreightZone_UnLoad.End
+
+Program.Sub.DataTable.Start
+F.Intrinsic.Control.SetErrorHandler("DataTable_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sEstsh.Declare(String)
+Variable.Local.iCount.Declare(String)
+Variable.Local.sPO.Declare(String)
+Variable.Local.sField.Declare(String)
+Variable.Local.sVend.Declare(String)
+Variable.Local.sMFG.Declare(String)
+Variable.Local.sCont.Declare(String)
+Variable.Local.sDist.Declare(String)
+Variable.Local.sZone.Declare(String)
+
+Variable.Local.sField.Set("PO #")
+
+F.Data.DataTable.CreateFromSQL("Containers", "con", "Select Distinct RTRIM(Container), RTRIM(PO) as 'PO #' from V_PO_CONTAINER", True)
+F.Data.DataTable.AddColumn("Containers", "Manufacture ID", "String")
+F.Data.DataTable.AddColumn("Containers", "Estab. ID", "String")
+F.Data.DataTable.AddColumn("Containers", "Invoice #", "String")
+F.Data.DataTable.AddColumn("Containers", "Dutiable Value", "Float")
+F.Data.DataTable.AddColumn("Containers", "Harbor Fee", "Float")
+F.Data.DataTable.AddColumn("Containers", "ZONE_ADMISSION", "String")
+
+F.Data.DataTable.CreateFromSQL("RealOne", "con", "Select Distinct RTRIM(Container), RTRIM(PO) as 'PURCHASE_ORDER' from V_PO_CONTAINER", True)
+F.Data.DataTable.AddColumn("RealOne", "INVOICE_NO", "String")
+F.Data.DataTable.AddColumn("RealOne", "DUTIABLE_VALUE", "Float")
+F.Data.DataTable.AddColumn("RealOne", "HARBOR_FEE", "Float")
+F.Data.DataTable.AddColumn("RealOne", "ZONE_ADMISSION", "String")
+
+'**************************************************FEQ
+'Variable.Local.sSql.Set("Select RTrim(Container), RTrim(PO) as 'PO #', ' ' as 'Manufacture ID', ' ' as 'Estab. ID', ' ' as 'Invoice #', ' ' as 'Dutiable Value', ' ' as 'Harbor Fee', ")
+'Function.Intrinsic.String.Build("{0} ' ' as 'ZONE_ADMISSION' from V_PO_CONTAINER ", Variable.Local.sSql, Variable.Local.sSql)
+'Function.Data.DataTable.CreateFromSQL("Containers", "con", Variable.Local.sSql, True)
+'Variable.Local.sSql.Set("Select RTrim(Container), PO as PURCHASE_ORDER,' ' as INVOICE_NO, cast(' ' as NUMERIC(8,4)) as DUTIABLE_VALUE, cast(' ' as NUMERIC(8,4)) as HARBOR_FEE, ' ' as ZONE_ADMISSION ")
+'Function.Intrinsic.String.Build(" {0} from V_PO_CONTAINER", Variable.Local.sSql, Variable.Local.sSql)
+'Function.Data.DataTable.CreateFromSQL("RealOne", "con", Variable.Local.sSql, True)
+'**************************************************FEQ
+
+Function.Data.DataView.Create("Containers", "ContView")
+'Function.ODBC.Connection!con.ExecuteAndReturn("Select Distinct Container from V_PO_CONTAINER", Variable.Local.sCont)
+'Variable.Local.iCount.Set(0)
+'Using Fill from Dic for the MFGI
+F.Data.Dictionary.CreateFromSQL("PurchaseOrder", "con","Select Distinct Purchase_Order, Vendor from V_PO_Header")
+F.Data.Dictionary.SetDefaultReturn("PurchaseOrder", "")
+F.Data.DataTable.AddColumn("Containers", "Vendor", "String")
+F.Data.DataTable.FillFromDictionary("Containers", "PurchaseOrder", "PO #", "Vendor")
+F.Data.Dictionary.Close("PurchaseOrder")
+F.Data.Dictionary.CreateFromSQL("MFGID", "con", "Select Distinct Vendor, MFGID from GCG_3613_MFGID")
+F.Data.Dictionary.SetDefaultReturn("MFGID", "")
+F.Data.DataTable.FillFromDictionary("Containers", "MFGID", "Vendor", "Manufacture ID")
+F.Data.Dictionary.Close("MFGID")
+F.Data.Dictionary.CreateFromSQL("Container", "con", "Select Distinct RTrim(Container), Zone_Admission from GCG_3613_CONTAINER where zone_Admission NOT IN ('', '0')")
+F.Data.Dictionary.SetDefaultReturn("Container", "")
+F.Data.DataTable.FillFromDictionary("Containers", "Container", "Container", "ZONE_ADMISSION")
+F.Data.DataTable.FillFromDictionary("RealOne", "Container", "Container", "ZONE_ADMISSION")
+F.Data.Dictionary.Close("Container")
+
+'We will need to also populate the container table with information already stored in the container table
+F.Data.DataTable.AddExpressionColumn("Containers", "POKey", "String", "[Container]+'-'+[PO #]")
+F.Data.DataTable.AddExpressionColumn("RealOne", "POKey", "String", "[Container]+'-'+[PURCHASE_ORDER]")
+F.Data.DataTable.CreateFromSQL("ForDics", "con", "Select RTrim(Container) + '-' + RTrim(Purchase_Order) as POKEY, Invoice_NO, Dutiable_Value, Harbor_fee from GCG_3613_Container")
+
+F.Data.Dictionary.CreateFromDatatable("INV", "ForDics", "POKEY", "Invoice_NO")
+F.Data.Dictionary.SetDefaultReturn("INV", "")
+F.Data.DataTable.FillFromDictionary("Containers", "INV", "POKey", "Invoice #")
+F.Data.DataTable.FillFromDictionary("RealOne", "INV", "POKey", "INVOICE_NO")
+F.Data.Dictionary.Close("INV")
+
+F.Data.Dictionary.CreateFromDatatable("Dut", "ForDics", "POKEY", "Dutiable_Value")
+F.Data.Dictionary.SetDefaultReturn("Dut", "0.0")
+F.Data.DataTable.FillFromDictionary("Containers", "Dut", "POKey", "Dutiable Value")
+F.Data.DataTable.FillFromDictionary("RealOne", "Dut", "POKey", "DUTIABLE_VALUE")
+F.Data.Dictionary.Close("Dut")
+
+F.Data.Dictionary.CreateFromDatatable("Harb", "ForDics", "POKEY", "Harbor_fee")
+F.Data.Dictionary.SetDefaultReturn("Harb", "0.0")
+F.Data.DataTable.FillFromDictionary("Containers", "Harb", "POKey", "Harbor fee")
+F.Data.DataTable.FillFromDictionary("RealOne", "Harb", "POKey", "Harbor_Fee")
+F.Data.Dictionary.Close("Harb")
+
+F.Data.DataTable.Close("ForDics")
+
+'****************************************************** SKC
+'F.Intrinsic.Control.For(v.Local.icount, 0, Variable.DataTable.Containers.RowCount--)
+'	Variable.Local.sCont.Set(Variable.DataTable.Containers(Variable.Local.iCount).Container!FieldValTrim)
+'	Function.Intrinsic.String.Build("Select Top 1 ZONE_ADMISSION from GCG_3613_CONTAINER where Container = '{0}' ", Variable.Local.sCont, Variable.Local.sSql)
+'	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sZone)
+'	Function.Data.DataTable.SetValue("Containers", Variable.Local.iCount, "ZONE_ADMISSION", Variable.Local.sZone)
+'	Function.Data.DataTable.SetValue("RealOne", Variable.Local.iCount, "ZONE_ADMISSION", Variable.Local.sZone)
+'	Variable.Local.sPO.Set(Variable.DataTable.Containers(Variable.Local.iCount).[Variable.Local.sField]!FieldValTrim)
+'	Function.Intrinsic.String.Build("Select VENDOR from V_PO_HEADER where PURCHASE_ORDER = '{0}' ", Variable.Local.sPO.Trim, Variable.Local.sSql)
+'	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sVend)
+'	Function.Intrinsic.String.Build("Select MFGID from GCG_3613_MFGID where Vendor = '{0}' ", Variable.Local.sVend.Trim, Variable.Local.sSql)
+'	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sMFG)
+'	Function.Data.DataTable.SetValue("Containers", Variable.Local.iCount, "Manufacture ID", Variable.Local.sMFG)
+'F.Intrinsic.Control.Next(v.Local.iCount)
+'****************************************************** SKC
+'******************************************************* SKC
+'Function.Intrinsic.Control.DoUntil(Variable.Local.iCount, =, Variable.DataTable.Containers.RowCount)
+'	Variable.Local.sCont.Set(Variable.DataTable.Containers(Variable.Local.iCount).Container!FieldValTrim)
+'	Function.Intrinsic.String.Build("Select Top 1 ZONE_ADMISSION from GCG_3613_CONTAINER where Container = '{0}' ", Variable.Local.sCont, Variable.Local.sSql)
+'	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sZone)
+'	Function.Data.DataTable.SetValue("Containers", Variable.Local.iCount, "ZONE_ADMISSION", Variable.Local.sZone)
+'	Function.Data.DataTable.SetValue("RealOne", Variable.Local.iCount, "ZONE_ADMISSION", Variable.Local.sZone)
+'	Function.Intrinsic.Math.Add(Variable.Local.iCount, 1, Variable.Local.iCount)	
+'Function.Intrinsic.Control.Loop
+'******************************************************* SKC
+Function.Data.Dictionary.CreateFromDataTable("DicZone", "Containers", "Container", "ZONE_ADMISSION", 4)
+'******************************************************* SKC
+'Variable.Local.iCount.Set(0)
+'Function.Intrinsic.Control.DoUntil(Variable.Local.iCount, =, Variable.DataTable.Containers.RowCount)
+'	Variable.Local.sPO.Set(Variable.DataTable.Containers(Variable.Local.iCount).[Variable.Local.sField]!FieldValTrim)
+'	Function.Intrinsic.String.Build("Select VENDOR from V_PO_HEADER where PURCHASE_ORDER = '{0}' ", Variable.Local.sPO.Trim, Variable.Local.sSql)
+'	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sVend)
+'	Function.Intrinsic.String.Build("Select MFGID from GCG_3613_MFGID where Vendor = '{0}' ", Variable.Local.sVend.Trim, Variable.Local.sSql)
+'	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sMFG)
+'	Function.Data.DataTable.SetValue("Containers", Variable.Local.iCount, "Manufacture ID", Variable.Local.sMFG)
+'	Function.Intrinsic.Math.Add(Variable.Local.iCount, 1, Variable.Local.iCount)
+'Function.Intrinsic.Control.Loop
+'******************************************************* SKC
+Function.ODBC.Connection!con.ExecuteAndReturn("Select Top 1 ESTID from GCG_3613_ESTID", Variable.Local.sEstsh)
+Function.Data.DataTable.SetValue("Containers", -1, "Estab. ID", Variable.Local.sEstsh)
+Function.Data.DataTable.AddColumn("Containers", "Remove", "String", "Remove")
+
+F.Intrinsic.Control.CallSub(chkairf_click)
+
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("DataTable_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.DataTable.End
+
+Program.Sub.ggcContainer_RowCellClick.Start
+F.Intrinsic.Control.SetErrorHandler("ggcContainer_RowCellClick_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sRet.Declare(String)
+Variable.Local.sCase.Declare(String)
+Variable.Local.sExp.Declare(String)
+Variable.Local.sCards.Declare(String)
+Variable.Local.iCount.Declare(Long)
+Variable.Local.sCase.Set(Variable.Args.CellValue)
+Gui.F_FreightZone.ggcContainer.GetRowValues(Variable.Global.uGrid, Variable.Args.RowIndex, Variable.Local.sRet)
+Function.Intrinsic.String.Split(Variable.Local.sRet, "*!*", Variable.Local.sRet)
+Function.Intrinsic.String.Build("Container = '{0}'", Variable.Local.sRet(0).Long, Variable.Local.sExp)
+Function.Data.DataTable.Select("RealOne", Variable.Local.sExp, Variable.Local.sCards)
+Function.Intrinsic.Control.If(Variable.Local.sCase, =, "Remove")
+	'need to remove row with matching container from both datatables
+	Function.Data.DataTable.Select("RealOne", Variable.Local.sExp, Variable.Local.sCards)
+	Function.Intrinsic.String.Split(Variable.Local.sCards, "*!*", Variable.Local.sCards)
+	Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.Local.sCards.UBound, 1)
+		Function.Data.DataTable.SetValue("Containers", Variable.Local.sCards(Variable.Local.iCount), "ZONE_ADMISSION", "")
+		Function.Data.DataTable.SetValue("RealOne", Variable.Local.sCards(Variable.Local.iCount), "ZONE_ADMISSION", "")
+	Function.Intrinsic.Control.Next(Variable.Local.iCount)
+	
+	F.Data.DataTable.DeleteRow("Parts")
+	F.Data.DataTable.DeleteRow("Addl")
+'*************************************** SKC
+'	Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.DataTable.Parts.RowCount--, 1)
+'		Function.Data.DataTable.DeleteRow("Parts", 0)
+'		Function.Data.DataTable.DeleteRow("Addl", 0)
+'	Function.Intrinsic.Control.Next(Variable.Local.iCount)
+'*************************************** SKC
+	Gui.F_FreightZone.txtCont.Text("")
+Function.Intrinsic.Control.Else
+	'Populate bottom grid
+	Variable.Global.uPO.Set(Variable.Local.sRet(1))
+	Variable.Global.uCont.Set(Variable.Local.sRet(0))
+	Function.Intrinsic.Control.CallSub(poppo)
+Function.Intrinsic.Control.EndIf
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("ggcContainer_RowCellClick_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.ggcContainer_RowCellClick.End
+
+Program.Sub.cmdSave_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdSave_Click_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sZone.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.fPck.Declare(Float)
+Variable.Local.bFlag.Declare(Boolean)
+Variable.Local.sZone.Set(Variable.Screen.F_FreightZone!ddlZoneAdNum.Text)
+Variable.Local.bFlag.Set(Variable.Screen.F_FreightZone!chkAirF.Value)
+Function.Intrinsic.Control.If(Variable.Local.sZone.Trim, =, "")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+Variable.Local.fPck.Set(Variable.Screen.F_FreightZone!txtPackages.Text)
+Function.Intrinsic.String.Build("Select * from GCG_3613_FREIGHTZONE where ZONE_ADMISSION = '{0}' ", Variable.Local.sZone, Variable.Local.sSql)
+Function.ODBC.Connection!con.OpenLocalRecordsetRW("rsts", Variable.Local.sSql)
+Function.ODBC.con!rsts.Set!INBOND_NO(Variable.Screen.F_FreightZone!txtInBondNo.Text)
+Function.ODBC.con!rsts.Set!BOL(Variable.Screen.F_FreightZone!txtBOL.Text)
+Function.ODBC.con!rsts.Set!CBP_SEAL_NO(Variable.Screen.F_FreightZone!txtCBP.Text)
+Function.ODBC.con!rsts.Set!PACKAGES(Variable.Local.fPck)
+Function.ODBC.con!rsts.Set!US_POU(Variable.Screen.F_FreightZone!txtUSPOU.Text)
+Function.ODBC.con!rsts.Set!FG_POL(Variable.Screen.F_FreightZone!txtFGPOU.Text)
+Function.ODBC.con!rsts.Set!IMPORT_CARRIER(Variable.Screen.F_FreightZone!txtImpCarr.Text)
+Function.ODBC.con!rsts.Set!BONDED_CARRIER(Variable.Screen.F_FreightZone!txtBonCarr.Text)
+Function.ODBC.con!rsts.Set!EXPORT_DATE(Variable.Screen.F_FreightZone!dtpExport.Value)
+Function.ODBC.con!rsts.Set!IMPORT_DATE(Variable.Screen.F_FreightZone!dtpImport.Value)
+Function.ODBC.con!rsts.Set!AIR_FREIGHT(Variable.Local.bFlag)
+Function.ODBC.con!rsts.Update
+Function.ODBC.con!rsts.Close
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("cmdSave_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdSave_Click.End
+
+Program.Sub.popZone.Start
+F.Intrinsic.Control.SetErrorHandler("popZone_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sZone.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sAir.Declare(String)
+V.Local.sDate.Declare(Date)
+Variable.Local.sZone.Set(Variable.Screen.F_FreightZone!ddlZoneAdNum.Text)
+Function.Intrinsic.String.Build("Select * from GCG_3613_FREIGHTZONE where ZONE_ADMISSION = '{0}' ", Variable.Local.sZone, Variable.Local.sSql)
+Function.ODBC.Connection!con.OpenLocalRecordsetRO("rstp", Variable.Local.sSql)
+Function.Intrinsic.Control.If(Variable.ODBC.con!rstp.EOF, <>, True)
+	Gui.F_FreightZone.txtInBondNo.Text(Variable.ODBC.con!rstp.FieldValTrim!INBOND_NO)
+	Gui.F_FreightZone.txtBOL.Text(Variable.ODBC.con!rstp.FieldValTrim!BOL)
+	Gui.F_FreightZone.txtCBP.Text(Variable.ODBC.con!rstp.FieldValTrim!CBP_SEAL_NO)
+	Gui.F_FreightZone.txtPackages.Text(Variable.ODBC.con!rstp.FieldVal!PACKAGES)
+	Gui.F_FreightZone.txtUSPOU.Text(Variable.ODBC.con!rstp.FieldValTrim!US_POU)
+	Gui.F_FreightZone.txtFGPOU.Text(Variable.ODBC.con!rstp.FieldValTrim!FG_POL)
+	Gui.F_FreightZone.txtImpCarr.Text(Variable.ODBC.con!rstp.FieldValTrim!IMPORT_CARRIER)
+	Gui.F_FreightZone.txtBonCarr.Text(Variable.ODBC.con!rstp.FieldValTrim!BONDED_CARRIER)
+	V.Local.sDate.Set(Variable.ODBC.con!rstp.FieldValTrim!EXPORT_DATE)
+	Gui.F_FreightZone.dtpExport.Value(V.Local.sDate.PervasiveDate)
+	V.Local.sDate.Set(Variable.ODBC.con!rstp.FieldValTrim!IMPORT_DATE)
+	Gui.F_FreightZone.dtpImport.Value(V.Local.sDate.PervasiveDate)
+	Variable.Local.sAir.Set(Variable.ODBC.con!rstp.FieldValTrim!AIR_FREIGHT)
+	Function.Intrinsic.Control.If(Variable.Local.sAir, =, "F")
+		Gui.F_FreightZone.chkAirF.Value(False)
+	Function.Intrinsic.Control.ElseIf(Variable.Local.sAir, =, "T")
+		Gui.F_FreightZone.chkAirF.Value(True)
+	Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Control.Else
+	Gui.F_FreightZone..ClearGroup(1)
+	Gui.F_FreightZone.chkAirF.Value(0)
+
+'************************************** SKC
+'	Gui.F_FreightZone.txtInBondNo.Text("")
+'	Gui.F_FreightZone.txtBOL.Text("")
+'	Gui.F_FreightZone.txtCBP.Text("")
+'	Gui.F_FreightZone.txtPackages.Text("0")
+'	Gui.F_FreightZone.txtUSPOU.Text("")
+'	Gui.F_FreightZone.txtFGPOU.Text("")
+'	Gui.F_FreightZone.txtImpCarr.Text("")
+'	Gui.F_FreightZone.txtBonCarr.Text("")
+'	Gui.F_FreightZone.chkAirF.Value(False)
+'************************************** SKC
+Function.Intrinsic.Control.EndIf
+Function.ODBC.con!rstp.Close
+Gui.F_FreightZone.txtCont.Text("")
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("popZone_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.popZone.End
+
+Program.Sub.chkAirF_Click.Start
+F.Intrinsic.Control.SetErrorHandler("chkAirF_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+Variable.Local.bFlag.Declare(Boolean)
+Variable.Local.sZone.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sCount.Declare(String)
+Variable.Local.iCount.Declare(Long)
+Variable.Local.iIndex.Declare(Long)
+Variable.Local.fHarb.Declare(Float)
+Variable.Local.sDuty.Declare(String)
+Variable.Local.sInvy.Declare(String)
+Variable.Local.sInvoice.Declare(String)
+Variable.Local.sDuti.Declare(String)
+
+Variable.Local.bFlag.Set(Variable.Screen.F_FreightZone!chkAirF.Value)
+Variable.Local.sZone.Set(Variable.Screen.F_FreightZone!ddlZoneAdNum.Text)
+Variable.Local.sDuty.Set("Dutiable Value")
+Variable.Local.sInvy.Set("Invoice #")
+
+F.Intrinsic.Control.If(V.Local.sZone.Trim, =, "")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+'If checked, all Harbor Fees change to zero, otherwise, Harbor fee is 0.125*Dutiable Value
+Function.Intrinsic.String.Build("ZONE_ADMISSION = '{0}'", Variable.Local.sZone, Variable.Local.sSql)
+Function.Data.DataTable.Select("Containers", Variable.Local.sSql, Variable.Local.sCount)
+Function.Intrinsic.Control.If(Variable.Local.sCount, <>, "***NORETURN***")
+	Function.Intrinsic.String.Split(Variable.Local.sCount, "*!*", Variable.Local.sCount)
+	Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.Local.sCount.UBound, 1)	
+		Variable.Local.iIndex.Set(Variable.Local.sCount(Variable.Local.iCount))
+		Variable.Local.sDuti.Set(Variable.DataTable.Containers(Variable.Local.iIndex).[Variable.Local.sDuty]!FieldValFloat)
+		Variable.Local.sInvoice.Set(Variable.DataTable.Containers(Variable.Local.iIndex).[Variable.Local.sInvy]!FieldValTrim)
+		Function.Intrinsic.Control.If(Variable.Local.bFlag, =, True)
+			Variable.Local.fHarb.Set(0)
+		Function.Intrinsic.Control.Else
+			Function.Intrinsic.Math.Mult(Variable.Local.sDuti.Float, 0.125, Variable.Local.fHarb)
+		Function.Intrinsic.Control.EndIf
+		Function.Data.DataTable.SetValue("Containers", Variable.Local.sCount(Variable.Local.iCount), "Harbor Fee", Variable.Local.fHarb)
+		Function.Data.DataTable.SetValue("RealOne", Variable.Local.sCount(Variable.Local.iCount), "Harbor_Fee", Variable.Local.fHarb, "Invoice_NO", Variable.Local.sInvoice, "Dutiable_Value", Variable.Local.sDuti.Float)
+	Function.Intrinsic.Control.Next(Variable.Local.iCount)		
+Function.Intrinsic.Control.EndIf
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("chkAirF_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.chkAirF_Click.End
+
+Program.Sub.popPO.Start
+F.Intrinsic.Control.SetErrorHandler("popPO_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Variable.Local.sPO.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sLines.Declare(String)
+Variable.Local.sPart.Declare(String)
+Variable.Local.iCount.Declare(Long)
+Variable.Local.fQtyO.Declare(Float)
+Variable.Local.fQtyR.Declare(Float)
+Variable.Local.fQtyInv.Declare(Float)
+Variable.Local.fVar.Declare(Float)
+Variable.Local.sAddl.Declare(String)
+Variable.Local.sPartRev.Declare(String)
+Variable.Local.sRev.Declare(String)
+Variable.Local.sContainer.Declare(String)
+Variable.Local.fHQty.Declare(Float)
+Variable.Local.fHWt.Declare(Float)
+Variable.Local.sHNO.Declare(String)
+Variable.Local.sHRate.Declare(String)
+Variable.Local.sHDesc.Declare(String)
+Variable.Local.sHWt.Declare(String)
+Variable.Local.sHUM.Declare(String)
+Variable.Local.sHQTY.Declare(String)
+Variable.Local.sForm.Declare(String)
+Variable.Local.sADCase.Declare(String)
+Variable.Local.sADRate.Declare(String)
+Variable.Local.sLoca.Declare(String)
+Variable.Local.sZone.Declare(String)
+Variable.Local.iLim.Declare(String)
+Variable.Local.sCOO.Declare(String)
+
+'select all the lines in the PO for the container.
+Function.Intrinsic.String.Build("Select PO_LINE from V_PO_CONTAINER where PO = '{0}' and CONTAINER = '{1}' ", Variable.Global.uPO, Variable.Global.uCont, Variable.Local.sSql)
+Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sLines)
+Function.Intrinsic.String.Split(Variable.Local.sLines, "#$#", Variable.Local.sLines)
+Function.Data.DataTable.DeleteRow("Parts")
+Function.Data.DataTable.DeleteRow("Addl")
+'******************************** SKC
+'Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.DataTable.Parts.RowCount--, 1)
+'	Function.Data.DataTable.DeleteRow("Parts", 0)
+'	Function.Data.DataTable.DeleteRow("Addl", 0)
+'Function.Intrinsic.Control.Next(Variable.Local.iCount)
+'******************************** SKC
+Function.Intrinsic.Control.For(Variable.Local.iCount, 0, Variable.Local.sLines.UBound, 1)
+	F.Intrinsic.String.Split(V.Local.sLines(V.Local.iCount), "*!*", V.Local.sLines(V.Local.iCount))
+	Function.Intrinsic.String.Build("Select PART, LOCATION, DESCRIPTION, QTY_ORDER, QTY_RECEIVED from V_PO_LINES WHERE PURCHASE_ORDER = '{0}' AND RECORD_NO = '{1}' ", Variable.Global.uPO, Variable.Local.sLines(Variable.Local.iCount), Variable.Local.sSql)
+	V.Local.sPart.Set("")
+	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sPart)
+	F.Intrinsic.Control.If(V.Local.sPart.Trim, =, "")
+		F.Intrinsic.String.Build("Select PART, LOCATION, DESCRIPTION, QTY_ORDER, QTY_RECEIVED from V_PO_HISTORY WHERE PURCHASE_ORDER = '{0}' and PO_LINE = '{1}' ", V.Global.uPO, V.Local.sLines(Variable.Local.iCount), V.Local.sSql)
+		Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sPart)
+	F.Intrinsic.Control.EndIf
+	Function.Intrinsic.String.Split(Variable.Local.sPart, "*!*", Variable.Local.sPart)
+	Variable.Local.fQtyO.Set(Variable.Local.sPart(3).Float)
+	Variable.Local.fQtyR.Set(Variable.Local.sPart(4).Float)
+	Function.Intrinsic.String.RPad(Variable.Local.sPart(0), " ", 20, Variable.Local.sPartRev)
+	Function.Intrinsic.String.Right(Variable.Local.sPartRev, 3, Variable.Local.sRev)
+	Function.Intrinsic.String.Left(Variable.Local.sPartRev, 7, Variable.Local.sPart(0))
+	Function.Intrinsic.Math.Sub(Variable.Local.fQtyO, Variable.Local.fQtyR, Variable.Local.fVar)
+	Function.Intrinsic.String.Build("Select * from GCG_3613_ForeignPart where Part = '{0}' and Rev = '{1}' and LOC = '{2}' ", Variable.Local.sPart(0).Trim, Variable.Local.sRev, Variable.Local.sPart(1).Trim, Variable.Local.sSql)
+	Function.ODBC.Connection!con.OpenLocalRecordsetRO("rsti", Variable.Local.sSql)
+	Function.Intrinsic.String.Build("Select QTY_IN_INV from GCG_3613_ZONEPARTS where Container = '{0}' and Purchase_Order = '{1}' and Line = '{2}' ", Variable.Global.uCont, Variable.Global.uPO, Variable.Local.sLines(Variable.Local.iCount), Variable.Local.sSql)
+	Function.Intrinsic.String.Build("{0} and Part = '{1}' and Rev = '{2}' and Loc = '{3}' ", Variable.Local.sSql, Variable.Local.sPart(0).Trim, Variable.Local.sRev, Variable.Local.sPart(1).Trim, Variable.Local.sSql)
+	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sSql)
+	Variable.Local.fQtyInv.Set(Variable.Local.sSql.Float)
+	Function.Intrinsic.Control.If(Variable.ODBC.con!rsti.EOF, <>, True)
+		Variable.Local.fHQty.Set(Variable.ODBC.con!rsti.FieldValFloat!Conversion_Factor)
+		Variable.Local.fHWt.Set(Variable.ODBC.con!rsti.FieldValFloat!HTSUS_WEIGHT)		
+		Variable.Local.sHNO.Set(Variable.ODBC.con!rsti.FieldValTrim!HTSUS_NO)
+		Variable.Local.sHRate.Set(Variable.ODBC.con!rsti.FieldValTrim!HTSUS_RATE)
+		Variable.Local.sHDesc.Set(Variable.ODBC.con!rsti.FieldValTrim!HTSUS_DESC)
+		Variable.Local.sHWt.Set(Variable.ODBC.con!rsti.FieldValTrim!HTSUS_WEIGHT)
+		Variable.Local.sHUM.Set(Variable.ODBC.con!rsti.FieldValTrim!HTSUS_UM)
+		Variable.Local.sForm.Set(Variable.ODBC.con!rsti.FieldValTrim!FORM_ID)
+		Variable.Local.sADCase.Set(Variable.ODBC.con!rsti.FieldValTrim!AD_CVD_CASE)
+		Variable.Local.sADRate.Set(Variable.ODBC.con!rsti.FieldValTrim!AD_CVD_RATE)
+		Variable.Local.sLoca.Set(Variable.ODBC.con!rsti.FieldValTrim!LOC_CODE)
+		Variable.Local.sZone.Set(Variable.ODBC.con!rsti.FieldValTrim!ZONE_STATUS)
+		Variable.Local.sCOO.Set(Variable.ODBC.con!rsti.FieldValTrim!ORIGIN_COUNTRY)
+	Function.Intrinsic.Control.Else
+		Variable.Local.fHQty.Set(1)
+		Variable.Local.fHWt.Set(1)
+		Variable.Local.sHNO.Set("Not Found")
+		Variable.Local.sHRate.Set("")
+		Variable.Local.sHDesc.Set("")
+		Variable.Local.sHWt.Set("")
+		Variable.Local.sHUM.Set("")
+		Variable.Local.sHQTY.Set("")
+		Variable.Local.sForm.Set("")
+		Variable.Local.sADCase.Set("")
+		Variable.Local.sADRate.Set("")
+		Variable.Local.sLoca.Set("")
+		Variable.Local.sZone.Set("")
+		Variable.Local.sCOO.Set("")
+	Function.Intrinsic.Control.EndIf
+
+	Function.Intrinsic.Math.Mult(Variable.Local.fHQty, Variable.Local.fQtyR, Variable.Local.fHQty)
+	Function.Intrinsic.Math.Mult(Variable.Local.fHQty, Variable.Local.fHWt, Variable.Local.fHWt)
+	
+	Function.Data.DataTable.AddRow("Parts", "PO. Line", Variable.Local.sLines(Variable.Local.iCount), "Part", Variable.Local.sPartRev, "Description", Variable.Local.sPart(2), "COO", Variable.Local.sCOO, "Qty. Ordered", Variable.Local.fQtyO, "Qty. Received", Variable.Local.fQtyR, "Variance", Variable.Local.fVar, "Qty. in Inv.", Variable.Local.fQtyInv, "HTSUS No.", Variable.Local.sHNO)
+	Function.Data.DataTable.AddRow("Addl", "HTSUS No.", Variable.Local.sHNO, "HTSUS Rate", Variable.Local.sHRate, "HTSUS Desc.", Variable.Local.sHDesc, "HTSUS Wt.", Variable.Local.fHWt, "HTSUS UM", Variable.Local.sHUM, "HTSUS Qty.", Variable.Local.fHQty, "Form ID", Variable.Local.sForm, "AD/CVD Case", Variable.Local.sADCase, "AD/CVD Rate", Variable.Local.sADRate, "Location", Variable.Local.sLoca, "Zone", Variable.Local.sZone)
+	
+	Function.ODBC.con!rsti.Close
+Function.Intrinsic.Control.Next(Variable.Local.iCount)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("popPO_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.popPO.End
+
+Program.Sub.createTables.Start
+F.Intrinsic.Control.SetErrorHandler("popPO_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sFields.Declare(String)
+Variable.Local.sTypes.Declare(String)
+Variable.Local.sFields.Set("PO. Line*!*Part*!*Description*!*COO*!*Qty. Ordered*!*Qty. Received*!*Variance*!*Qty. in Inv.*!*HTSUS No.")
+Variable.Local.sTypes.Set("String*!*String*!*String*!*String*!*Float*!*Float*!*Float*!*Float*!*String")
+Function.Data.DataTable.CreateFromString("Parts", "", Variable.Local.sFields, Variable.Local.sTypes, "*!*", "#$#", True)
+Variable.Local.sFields.Set("HTSUS No.*!*HTSUS Rate*!*HTSUS Desc.*!*HTSUS Wt.*!*HTSUS UM*!*HTSUS Qty.*!*Form ID*!*AD/CVD Case*!*AD/CVD Rate*!*Location*!*Zone")
+Variable.Local.sTypes.Set("String*!*String*!*String*!*String*!*String*!*String*!*String*!*String*!*String*!*String*!*String")
+Function.Data.DataTable.CreateFromString("Addl", "", Variable.Local.sFields, Variable.Local.sTypes, "*!*", "#$#", True)
+Gui.F_FreightZone.ggcParts.AddGridViewFromDataTable("Partes", "Parts")
+Gui.F_FreightZone.ggcParts.MainView("Partes")
+Gui.F_FreightZone.ggcAddl.AddGridViewFromDataTable("Adic", "Addl")
+Gui.F_FreightZone.ggcAddl.MainView("Adic")
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("popPO_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.createTables.End
+
+Program.Sub.SaveTables.Start
+F.Intrinsic.Control.SetErrorHandler("SaveTables_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+
+V.Local.sFilter.Declare(String)
+
+F.Intrinsic.Control.If(V.Global.sPrevZone.Trim, <>, "")
+	F.Intrinsic.String.Build("[ZONE_ADMISSION] = '{0}'", V.Global.sPrevZone, V.Local.sFilter)
+	F.Data.DataView.Create("RealOne", "Temp", 22, V.Local.sFilter, "PURCHASE_ORDER ASC")
+	F.Data.DataView.ToDataTable("RealOne", "Temp", "TempTable")
+	F.Data.DataTable.RemoveColumn("TempTable", "POKEY")
+	Function.Data.DataTable.SaveToDB("TempTable", "con", "GCG_3613_Container", "CONTAINER*!*PURCHASE_ORDER", 256)
+	F.Data.DataView.Close("RealOne", "Temp")
+	F.Data.DataTable.Close("TempTable")
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("SaveTables_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End
+
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.SaveTables.End
+
+Program.Sub.ggcContainer_CellValueChanged.Start
+F.Intrinsic.Control.SetErrorHandler("ggcContainer_CellValueChanged_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Function.Intrinsic.Control.CallSub(chkairf_click)
+F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.Label("ggcContainer_CellValueChanged_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.ggcContainer_CellValueChanged.End
+
+Program.Sub.ZonePartSave.Start
+F.Intrinsic.Control.SetErrorHandler("ZonePartSave_Err")
+F.Intrinsic.Control.ClearErrors
+V.Local.sError.Declare(String)
+Variable.Local.sSql.Declare(String)
+Variable.Local.sRet.Declare(String)
+Variable.Local.iIndex.Declare(Long)
+Variable.Local.sCont.Declare(String)
+Variable.Local.sLines.Declare(String)
+Variable.Local.sPart.Declare(String)
+Variable.Local.sRev.Declare(String)
+
+'This subroutine was replaced by sub ZPSPrime
+Function.ODBC.Connection!con.ExecuteAndReturn("Select Container from GCG_3613_CONTAINER where ZONE_ADMISSION = '' ", Variable.Local.sRet)
+Function.Intrinsic.String.Split(Variable.Local.sRet, "#$#", Variable.Local.sRet)
+Function.Intrinsic.String.RemoveArrayDuplicates(Variable.Local.sRet, Variable.Local.sRet)
+Function.Intrinsic.Control.For(Variable.Local.iIndex, 0, Variable.Local.sRet.UBound, 1)
+	Function.Intrinsic.String.Split(Variable.Local.sRet(Variable.Local.iIndex), "*!*", Variable.Local.sCont)
+	Function.Intrinsic.String.Build("Delete from GCG_3613_ZONEPARTS where CONTAINER = '{0}' ", Variable.Local.sCont.Trim, Variable.Local.sSql)
+	Function.ODBC.Connection!con.Execute(Variable.Local.sSql)
+Function.Intrinsic.Control.Next(Variable.Local.iIndex)
+
+Variable.Local.sSql.Set("Select CONTAINER, PURCHASE_ORDER from GCG_3613_CONTAINER where ZONE_ADMISSION <> '' ")
+Function.ODBC.Connection!con.OpenLocalRecordsetRO("rstPO", Variable.Local.sSql)
+Function.ODBC.Connection!con.OpenLocalRecordsetRW("rstZONE", "Select * from GCG_3613_ZONEPARTS")
+
+Function.Intrinsic.Control.DoUntil(Variable.ODBC.con!rstPO.EOF, =, True)
+	Function.Intrinsic.String.Build("Select PO_LINE from V_PO_CONTAINER where PO = '{0}' and CONTAINER = '{1}' ", Variable.ODBC.con!rstPO.FieldValTrim!PURCHASE_ORDER, Variable.ODBC.con!rstPO.FieldValTrim!CONTAINER, Variable.Local.sSql)
+	Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sLines)
+	Function.Intrinsic.String.Split(Variable.Local.sLines, "*!*", Variable.Local.sLines)
+	Function.Intrinsic.Control.For(Variable.Local.iIndex, 0, Variable.Local.sLines.UBound, 1)
+		Function.Intrinsic.String.Build("Select * from GCG_3613_ZONEPARTS where CONTAINER = '{0}' ", Variable.ODBC.con!rstPO.FieldValTrim!CONTAINER, Variable.Local.sSql)
+		Function.Intrinsic.String.Build(" {0} and PURCHASE_ORDER = '{1}' and LINE = '{2}' ", Variable.Local.sSql, Variable.ODBC.con!rstPO.FieldValTrim!PURCHASE_ORDER, Variable.Local.sLines(variable.Local.iIndex), Variable.Local.sSql)
+		Function.ODBC.Connection!con.ExecuteAndReturn(Variable.Local.sSql, Variable.Local.sRet)
+		Function.Intrinsic.Control.If(Variable.Local.sRet.Trim, =, "")
+			'search tables for part, rev, loc and create new item in zoneparts
+			Function.Intrinsic.String.Build("Select PART, LOCATION from V_PO_LINES where PURCHASE_ORDER = '{0}' and RECORD_NO = '{1}' ", Variable.ODBC.con!rstPO.FieldValTrim!PURCHASE_ORDER, Variable.Local.sLines(Variable.Local.iIndex), Variable.Local.sSql)
+			Function.ODBC.Connection!con.OpenLocalRecordsetRO("RstInfo", Variable.Local.sSql)
+			Function.Intrinsic.Control.If(Variable.ODBC.con!RstInfo.EOF, <>, True)
+				Function.Intrinsic.String.RPad(Variable.ODBC.con!RstInfo.FieldValTrim!PART, " ", 20, Variable.Local.sPart)
+				Function.Intrinsic.String.Right(Variable.Local.sPart, 3, Variable.Local.sRev)
+				Function.Intrinsic.String.Left(Variable.Local.sPart, 17, Variable.Local.sPart)
+				Function.ODBC.con!rstZONE.AddNew
+				Function.ODBC.con!rstZONE.Set!CONTAINER(Variable.ODBC.con!rstPO.FieldValTrim!CONTAINER)
+				Function.ODBC.con!rstZONE.Set!PURCHASE_ORDER(Variable.ODBC.con!rstPO.FieldValTrim!PURCHASE_ORDER)
+				Function.ODBC.con!rstZONE.Set!LINE(Variable.Local.sLines(Variable.Local.iIndex))
+				Function.ODBC.con!rstZONE.Set!PART(Variable.Local.sPart)
+				Function.ODBC.con!rstZONE.Set!REV(Variable.Local.sRev)
+				Function.ODBC.con!rstZONE.Set!LOC(Variable.ODBC.con!RstInfo.FieldValTrim!LOCATION)
+				Function.ODBC.con!rstZONE.Update
+			Function.Intrinsic.Control.EndIf
+			Function.ODBC.con!RstInfo.Close
+		Function.Intrinsic.Control.Endif
+	Function.Intrinsic.Control.Next(Variable.Local.iIndex)
+	Function.ODBC.con!rstPO.MoveNext
+Function.Intrinsic.Control.Loop
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("ZonePartSave_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.ZonePartSave.End
+
+Program.Sub.ZPSPrime.Start
+F.Intrinsic.Control.SetErrorHandler("ZPSPrime_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+V.Local.iCount.Declare(Long)
+V.Local.sSql.Declare(String)
+V.Local.sRet.Declare(String)
+V.Local.sPart.Declare(String)
+V.Local.sRev.Declare(String)
+V.Local.iIndex.Declare(Long)
+
+'Deleting the entries in GCG_3613_ZONEPARTS that dont have have a zone anymore
+F.ODBC.Connection!con.ExecuteAndReturn("Select distinct Container from GCG_3613_CONTAINER where ZONE_ADMISSION = '' ", Variable.Local.sSql)
+F.Intrinsic.String.Replace(V.Local.sSql, "*!*#$#", "', '", V.Local.sSql)
+F.Intrinsic.String.Build("Delete from GCG_3613_ZONEPARTS where CONTAINER in ('{0}')", V.Local.sSql, V.Local.sSql)
+F.ODBC.Connection!con.Execute(V.Local.sSql) 
+
+'Now we need to add the PO/Lines in the GCG_3613_ZONEPARTS table that are missing
+F.Data.DataTable.CreateFromSQL("ZoneParts", "con", "Select * From GCG_3613_ZONEPARTS", True)
+
+'We will be using a dictionary to avoid adding duplicate entries
+F.Data.Dictionary.CreateFromSQL("Existing", "Con", "Select Purchase_Order + '-' + Line + '-' + Container  as Combo, Container from GCG_3613_ZONEPARTS")
+F.Data.Dictionary.SetDefaultReturn("Existing", "NA")
+
+F.Data.DataTable.CreateFromSQL("POCONT", "con", "Select CONTAINER, PURCHASE_ORDER from GCG_3613_CONTAINER where ZONE_ADMISSION <> ''", True)
+F.Intrinsic.Control.For(V.Local.iCount, 0, V.DataTable.POCONT.RowCount--, 1)
+	V.Local.sSql.Set("Select PO, PO_LINE, CONTAINER, PO + '-' + PO_LINE + '-' + RTrim(Container)  as Combo from V_PO_CONTAINER ")
+	F.Intrinsic.String.Build("{0} where PO = '{1}' and CONTAINER = '{2}' ", V.Local.sSql, V.DataTable.POCONT(V.Local.iCount).PURCHASE_ORDER!FieldValTrim, V.DataTable.POCONT(V.Local.iCount).CONTAINER!FieldValTrim, V.Local.sSql)
+	F.Data.DataTable.CreateFromSQL("Temp", "Con", V.Local.sSql)
+	F.Data.DataTable.AddColumn("Temp", "Exists", "String")
+	F.Data.DataTable.FillFromDictionary("Temp", "Existing", "Combo", "Exists")
+	F.Data.DataView.Create("Temp", "TempView", 22, "Exists = 'NA'", "PO ASC, PO_LINE ASC")
+	F.Intrinsic.Control.For(V.Local.iIndex, 0, V.DataView.Temp!TempView.RowCount--, 1)
+		V.Local.sSql.Set("Select PART, LOCATION from V_PO_LINES ")
+		Function.Intrinsic.String.Build("{0} where PURCHASE_ORDER = '{1}' and RECORD_NO = '{2}' ", V.Local.sSql, V.DataView.Temp!TempView(V.Local.iIndex).PO!FieldValTrim, V.DataView.Temp!TempView(V.Local.iIndex).PO_LINE!FieldValTrim, V.Local.sSql)
+		Function.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Local.sRet)
+		F.Intrinsic.Control.If(V.Local.sRet.Trim, =, "")
+			V.Local.sSql.Set("Select PART, LOCATION from V_PO_HISTORY ")
+			Function.Intrinsic.String.Build("{0} where PURCHASE_ORDER = '{1}' and PO_LINE = '{2}' ", V.Local.sSql, V.DataView.Temp!TempView(V.Local.iIndex).PO!FieldValTrim, V.DataView.Temp!TempView(V.Local.iIndex).PO_LINE!FieldValTrim, V.Local.sSql)			
+		F.Intrinsic.Control.EndIf
+		F.Intrinsic.String.Split(V.Local.sRet, "#$#", V.Local.sRet)
+		F.Intrinsic.String.Split(V.Local.sRet(0), "*!*", V.Local.sRet)
+		Function.Intrinsic.String.RPad(V.Local.sRet(0), " ", 20, Variable.Local.sPart)
+		Function.Intrinsic.String.Right(Variable.Local.sPart, 3, Variable.Local.sRev)
+		Function.Intrinsic.String.Left(Variable.Local.sPart, 17, Variable.Local.sPart)
+		F.Data.DataTable.AddRow("ZoneParts", "Container", V.DataTable.POCONT(V.Local.iCount).CONTAINER!FieldValTrim, "Purchase_Order", V.DataTable.POCONT(V.Local.iCount).PURCHASE_ORDER!FieldValTrim, "Line", V.DataView.Temp!TempView(V.Local.iIndex).PO_LINE!FieldValTrim, "Part", V.Local.sPart, "Rev", V.Local.sRev, "Loc", V.Local.sRet(1))
+	F.Intrinsic.Control.Next(V.Local.iIndex)
+	F.Data.DataTable.Close("Temp")
+F.Intrinsic.Control.Next(V.Local.iCount)
+
+F.ODBC.Connection!con.Execute("Delete from GCG_3613_ZONEPARTS")
+F.Data.DataTable.SaveToDB("ZoneParts", "con", "GCG_3613_ZONEPARTS", "", 128)
+
+F.Data.Dictionary.Close("Existing")
+F.Data.DataTable.Close("ZoneParts")
+F.Data.DataTable.Close("POCONT")
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("ZPSPrime_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_FreightZone.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End
+
+'	F.Intrinsic.Control.CallSub(f_freightzone_unload)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.ZPSPrime.End
+
+Program.Sub.Comments.Start
+${$0$}$Freight Zone Screen$}$SISCO$}$8/15/2016 2:23:11 PM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This project was quoted by Strider Smith and coded by Sisco Quiroz
+September 2016.
+
+This code will run from a custom menu item under Production>Shop Floor Control>Transactions>Transfer WIP to WIP for multiple jobs.
+Program.Sub.Comments.End
