@@ -1,0 +1,5 @@
+CREATE TABLE "GCG_3613_Taxes_Paid"(
+ "PART" CHAR(17),
+ "REV" CHAR(3),
+ "LOC" CHAR(2),
+ "QTY" INTEGER);
