@@ -1,0 +1,160 @@
+Program.Sub.ScreenSU.Start
+Gui.F_TaxesPaidPts..Create
+Gui.F_TaxesPaidPts..Caption("Taxes Paid Parts")
+Gui.F_TaxesPaidPts..Size(7125,6330)
+Gui.F_TaxesPaidPts..MinX(0)
+Gui.F_TaxesPaidPts..MinY(0)
+Gui.F_TaxesPaidPts..Position(0,0)
+Gui.F_TaxesPaidPts..BackColor(-2147483633)
+Gui.F_TaxesPaidPts..MousePointer(0)
+Gui.F_TaxesPaidPts..Event(UnLoad,F_TaxesPaidPts_UnLoad)
+Gui.F_TaxesPaidPts.ggcTaxesPaid.Create(GsGridControl)
+Gui.F_TaxesPaidPts.ggcTaxesPaid.Size(7050,5340)
+Gui.F_TaxesPaidPts.ggcTaxesPaid.Position(0,135)
+Gui.F_TaxesPaidPts.cmdSave.Create(Button)
+Gui.F_TaxesPaidPts.cmdSave.Size(855,375)
+Gui.F_TaxesPaidPts.cmdSave.Position(195,5505)
+Gui.F_TaxesPaidPts.cmdSave.Caption("Save")
+Gui.F_TaxesPaidPts.cmdSave.Event(Click,cmdSave_Click)
+Gui.F_TaxesPaidPts.cmdRefresh.Create(Button)
+Gui.F_TaxesPaidPts.cmdRefresh.Size(855,375)
+Gui.F_TaxesPaidPts.cmdRefresh.Position(1200,5505)
+Gui.F_TaxesPaidPts.cmdRefresh.Caption("Refresh")
+Gui.F_TaxesPaidPts.cmdRefresh.Event(Click,cmdRefresh_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Function.ODBC.Connection!con.OpenConnection(Variable.Ambient.PDSN, Variable.Ambient.PUser, Variable.Ambient.PPass)
+
+Function.Intrinsic.Control.CallSub(loadparts)
+Gui.F_TaxesPaidPts..Show
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Main.End
+
+Program.Sub.LoadParts.Start
+F.Intrinsic.Control.SetErrorHandler("LoadParts_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Variable.Local.sSql.Declare(String)
+
+Function.ODBC.Connection!con.Execute("Delete from GCG_3613_Taxes_Paid where QTY = '0' ")
+Variable.Local.sSql.Set("Select fp.Part, fp.rev, fp.Loc, tp.qty From (Select Part, Rev, Loc From GCG_3613_ForeignPart Union Select Part, Rev, Loc From GCG_3613_Taxes_Paid) fp Left Join GCG_3613_Taxes_Paid tp on fp.Part = tp.Part AND fp.Rev = tp.Rev AND fp.Loc = tp.Loc order by fp.Part")
+
+Function.Data.DataTable.CreateFromSql("TaxesPaid", "con", Variable.Local.sSql, True)
+Function.Data.DataView.Create("TaxesPaid", "TaxesPaidView")
+
+Gui.F_TaxesPaidPts.ggcTaxesPaid.DataSource("TaxesPaid")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "PART", "ReadOnly", "true")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "REV", "ReadOnly", "true")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "LOC", "ReadOnly", "true")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "QTY", "ReadOnly", "False")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "PART", "HeaderHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "REV", "HeaderHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "LOC", "HeaderHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "QTY", "HeaderHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "PART", "CellHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "REV", "CellHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "LOC", "CellHAlignment", "center")
+Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "QTY", "CellHAlignment", "center")
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("LoadParts_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.LoadParts.End
+
+Program.Sub.cmdSave_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdSave_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Gui.F_TaxesPaidPts..Visible(False)
+
+Function.Data.DataTable.SaveToDB("TaxesPaid", "con", "GCG_3613_Taxes_Paid", "PART*!*REV*!*LOC" )
+Gui.F_TaxesPaidPts..Show
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdSave_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdSave_Click.End
+
+Program.Sub.cmdRefresh_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdRefresh_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Gui.F_TaxesPaidPts..Visible(False)
+
+Function.Data.DataTable.Close("TaxesPaid")
+
+Gui.F_TaxesPaidPts.cmdRefresh.Enabled(False)
+Gui.F_TaxesPaidPts.cmdSave.Enabled(False)
+Function.Intrinsic.Control.CallSub(loadparts)
+Gui.F_TaxesPaidPts.cmdRefresh.Enabled(True)
+Gui.F_TaxesPaidPts.cmdSave.Enabled(True)
+
+Gui.F_TaxesPaidPts..Show
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdRefresh_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)
+Function.Intrinsic.Control.EndIf
+Program.Sub.cmdRefresh_Click.End
+
+Program.Sub.F_TaxesPaidPts_UnLoad.Start
+F.Intrinsic.Control.SetErrorHandler("F_TaxesPaidPts_UnLoad_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+Function.Data.DataTable.Close("TaxesPaid")
+Function.ODBC.Connection!con.Close
+Function.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("F_TaxesPaidPts_UnLoad_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.END
+Function.Intrinsic.Control.EndIf
+Program.Sub.F_TaxesPaidPts_UnLoad.End
+
+Program.Sub.Comments.Start
+${$0$}$GCG_3613_TaxesPaidPts$}$SISCO$}$7/11/2016 1:13:47 PM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a screen for the foreign part screen of the Freight Trade Zone project.
+Program.Sub.Comments.End
