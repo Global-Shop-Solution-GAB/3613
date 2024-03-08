@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SyntaxEdit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BorderStyle>None</BorderStyle>
+  <Pages>
+    <DefaultPage>
+      <Header>
+        <Offset>
+          <X>0</X>
+          <Y>0</Y>
+        </Offset>
+      </Header>
+      <Footer>
+        <Offset>
+          <X>0</X>
+          <Y>0</Y>
+        </Offset>
+      </Footer>
+      <PageSize>
+        <Width>0</Width>
+        <Height>0</Height>
+      </PageSize>
+    </DefaultPage>
+  </Pages>
+  <DisplayStrings />
+  <Selection>
+    <SelectionRect>
+      <Location>
+        <X>0</X>
+        <Y>156</Y>
+      </Location>
+      <Size>
+        <Width>24</Width>
+        <Height>3</Height>
+      </Size>
+      <X>0</X>
+      <Y>156</Y>
+      <Width>24</Width>
+      <Height>3</Height>
+    </SelectionRect>
+    <Options>UseColors OverwriteBlocks SelectLineOnTripleClick CopyLineWhenEmpty SelectWordOnCtrlClick</Options>
+  </Selection>
+  <Gutter>
+    <LineNumbersForeColor>WindowText</LineNumbersForeColor>
+    <Options>PaintLineNumbers PaintBookMarks PaintLineModificators</Options>
+  </Gutter>
+  <Margin>
+    <Visible>false</Visible>
+  </Margin>
+  <LineStyles />
+  <LineSeparator />
+  <Printing>
+    <Footer>
+      <Offset>
+        <X>0</X>
+        <Y>0</Y>
+      </Offset>
+    </Footer>
+    <Header>
+      <Offset>
+        <X>0</X>
+        <Y>0</Y>
+      </Offset>
+    </Header>
+  </Printing>
+  <WhiteSpace />
+  <TextSource>
+    <Position>
+      <X>0</X>
+      <Y>156</Y>
+    </Position>
+    <Lexer>
+      <Scheme>
+        <Author>Quantum Whale, LLC.</Author>
+        <Copyright>Copyright (c) 2004 - 2014 Quantum Whale LLC.</Copyright>
+        <FileType>gas</FileType>
+        <Version>1.5</Version>
+        <Styles>
+          <Style>
+            <Name>idents</Name>
+            <ForeColor>ControlText</ForeColor>
+          </Style>
+          <Style>
+            <Name>numbers</Name>
+            <ForeColor>ControlText</ForeColor>
+          </Style>
+          <Style>
+            <Name>reswords</Name>
+            <ForeColor>Blue</ForeColor>
+          </Style>
+          <Style>
+            <Name>comments</Name>
+            <ForeColor>Green</ForeColor>
+            <PlainText>true</PlainText>
+          </Style>
+          <Style>
+            <Name>xmlcomments</Name>
+            <ForeColor>Gray</ForeColor>
+          </Style>
+          <Style>
+            <Name>symbols</Name>
+            <ForeColor>WindowText</ForeColor>
+          </Style>
+          <Style>
+            <Name>whitespace</Name>
+            <ForeColor>WindowText</ForeColor>
+          </Style>
+          <Style>
+            <Name>strings</Name>
+            <ForeColor>Maroon</ForeColor>
+            <PlainText>true</PlainText>
+          </Style>
+          <Style>
+            <Name>directives</Name>
+            <ForeColor>Blue</ForeColor>
+          </Style>
+          <Style>
+            <Name>htmlparams</Name>
+            <ForeColor>Red</ForeColor>
+          </Style>
+          <Style>
+            <Name>syntax errors</Name>
+            <ForeColor>Red</ForeColor>
+          </Style>
+          <Style>
+            <Name>codes nippets</Name>
+            <ForeColor>Black</ForeColor>
+            <BackColor>255:180:228:180</BackColor>
+          </Style>
+          <Style>
+            <Name>GabReservedWords</Name>
+            <ForeColor>Blue</ForeColor>
+          </Style>
+          <Style>
+            <Name>GabTokenWithBrackets</Name>
+            <ForeColor>Gray</ForeColor>
+          </Style>
+          <Style>
+            <Name>GabFunctionIntrinsicDebug</Name>
+            <ForeColor>White</ForeColor>
+            <BackColor>Red</BackColor>
+            <FontStyle>Bold</FontStyle>
+            <PlainText>true</PlainText>
+          </Style>
+          <Style>
+            <Name>GabVariable</Name>
+            <ForeColor>Teal</ForeColor>
+          </Style>
+          <Style>
+            <Name>GabVariableSystemDefined</Name>
+            <ForeColor>Teal</ForeColor>
+            <FontStyle>Bold Italic</FontStyle>
+          </Style>
+          <Style>
+            <Name>GabGui</Name>
+            <ForeColor>OrangeRed</ForeColor>
+          </Style>
+          <Style>
+            <Name>GabProgramSubStartEnd</Name>
+            <ForeColor>Black</ForeColor>
+            <BackColor>LightGray</BackColor>
+            <FontStyle>Bold</FontStyle>
+            <PlainText>true</PlainText>
+          </Style>
+        </Styles>
+      </Scheme>
+    </Lexer>
+    <TextStrings>
+      <Lines>
+        <string>Program.Sub.ScreenSU.Start</string>
+        <string>Gui.F_TaxesPaidPts..Create</string>
+        <string>Gui.F_TaxesPaidPts..Caption("Taxes Paid Parts")</string>
+        <string>Gui.F_TaxesPaidPts..Size(7125,6330)</string>
+        <string>Gui.F_TaxesPaidPts..MinX(0)</string>
+        <string>Gui.F_TaxesPaidPts..MinY(0)</string>
+        <string>Gui.F_TaxesPaidPts..Position(0,0)</string>
+        <string>Gui.F_TaxesPaidPts..BackColor(-2147483633)</string>
+        <string>Gui.F_TaxesPaidPts..MousePointer(0)</string>
+        <string>Gui.F_TaxesPaidPts..Event(UnLoad,F_TaxesPaidPts_UnLoad)</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.Create(GsGridControl)</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.Size(7050,5340)</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.Position(0,135)</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Create(Button)</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Size(855,375)</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Position(195,5505)</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Caption("Save")</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Event(Click,cmdSave_Click)</string>
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Create(Button)</string>
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Size(855,375)</string>
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Position(1200,5505)</string>
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Caption("Refresh")</string>
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Event(Click,cmdRefresh_Click)</string>
+        <string>Program.Sub.ScreenSU.End</string>
+        <string />
+        <string>Program.Sub.Preflight.Start</string>
+        <string>Program.Sub.Preflight.End</string>
+        <string />
+        <string>Program.Sub.Main.Start</string>
+        <string>F.Intrinsic.Control.SetErrorHandler("Main_Err")</string>
+        <string>F.Intrinsic.Control.ClearErrors</string>
+        <string />
+        <string>V.Local.sError.Declare(String)</string>
+        <string />
+        <string>Function.ODBC.Connection!con.OpenConnection(Variable.Ambient.PDSN, Variable.Ambient.PUser, Variable.Ambient.PPass)</string>
+        <string />
+        <string>Function.Intrinsic.Control.CallSub(loadparts)</string>
+        <string>Gui.F_TaxesPaidPts..Show</string>
+        <string />
+        <string>F.Intrinsic.Control.ExitSub</string>
+        <string />
+        <string>F.Intrinsic.Control.Label("Main_Err")</string>
+        <string>F.Intrinsic.Control.If(V.Ambient.ErrorNumber,&lt;&gt;,0)</string>
+        <string>	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)</string>
+        <string>	F.Intrinsic.UI.Msgbox(V.Local.sError)</string>
+        <string>	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)</string>
+        <string>Function.Intrinsic.Control.EndIf</string>
+        <string>Program.Sub.Main.End</string>
+        <string />
+        <string>Program.Sub.LoadParts.Start</string>
+        <string>F.Intrinsic.Control.SetErrorHandler("LoadParts_Err")</string>
+        <string>F.Intrinsic.Control.ClearErrors</string>
+        <string />
+        <string>V.Local.sError.Declare(String)</string>
+        <string />
+        <string>Variable.Local.sSql.Declare(String)</string>
+        <string />
+        <string>Function.ODBC.Connection!con.Execute("Delete from GCG_3613_Taxes_Paid where QTY = '0' ")</string>
+        <string>Variable.Local.sSql.Set("Select fp.Part, fp.rev, fp.Loc, tp.qty From (Select Part, Rev, Loc From GCG_3613_ForeignPart Union Select Part, Rev, Loc From GCG_3613_Taxes_Paid) fp Left Join GCG_3613_Taxes_Paid tp on fp.Part = tp.Part AND fp.Rev = tp.Rev AND fp.Loc = tp.Loc order by fp.Part")</string>
+        <string />
+        <string>Function.Data.DataTable.CreateFromSql("TaxesPaid", "con", Variable.Local.sSql, True)</string>
+        <string>Function.Data.DataView.Create("TaxesPaid", "TaxesPaidView")</string>
+        <string />
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.DataSource("TaxesPaid")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "PART", "ReadOnly", "true")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "REV", "ReadOnly", "true")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "LOC", "ReadOnly", "true")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "QTY", "ReadOnly", "False")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "PART", "HeaderHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "REV", "HeaderHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "LOC", "HeaderHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "QTY", "HeaderHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "PART", "CellHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "REV", "CellHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "LOC", "CellHAlignment", "center")</string>
+        <string>Gui.F_TaxesPaidPts.ggcTaxesPaid.SetColumnProperty("TaxesPaid", "QTY", "CellHAlignment", "center")</string>
+        <string />
+        <string>F.Intrinsic.Control.ExitSub</string>
+        <string />
+        <string>F.Intrinsic.Control.Label("LoadParts_Err")</string>
+        <string>F.Intrinsic.Control.If(V.Ambient.ErrorNumber,&lt;&gt;,0)</string>
+        <string>	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)</string>
+        <string>	F.Intrinsic.UI.Msgbox(V.Local.sError)</string>
+        <string>	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)</string>
+        <string>Function.Intrinsic.Control.EndIf</string>
+        <string>Program.Sub.LoadParts.End</string>
+        <string />
+        <string>Program.Sub.cmdSave_Click.Start</string>
+        <string>F.Intrinsic.Control.SetErrorHandler("cmdSave_Click_Err")</string>
+        <string>F.Intrinsic.Control.ClearErrors</string>
+        <string />
+        <string>V.Local.sError.Declare(String)</string>
+        <string />
+        <string>Gui.F_TaxesPaidPts..Visible(False)</string>
+        <string />
+        <string>Function.Data.DataTable.SaveToDB("TaxesPaid", "con", "GCG_3613_Taxes_Paid", "PART*!*REV*!*LOC" )</string>
+        <string>Gui.F_TaxesPaidPts..Show</string>
+        <string />
+        <string>F.Intrinsic.Control.ExitSub</string>
+        <string />
+        <string>F.Intrinsic.Control.Label("cmdSave_Click_Err")</string>
+        <string>F.Intrinsic.Control.If(V.Ambient.ErrorNumber,&lt;&gt;,0)</string>
+        <string>	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)</string>
+        <string>	F.Intrinsic.UI.Msgbox(V.Local.sError)</string>
+        <string>	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)</string>
+        <string>Function.Intrinsic.Control.EndIf</string>
+        <string>Program.Sub.cmdSave_Click.End</string>
+        <string />
+        <string>Program.Sub.cmdRefresh_Click.Start</string>
+        <string>F.Intrinsic.Control.SetErrorHandler("cmdRefresh_Click_Err")</string>
+        <string>F.Intrinsic.Control.ClearErrors</string>
+        <string />
+        <string>V.Local.sError.Declare(String)</string>
+        <string />
+        <string>Gui.F_TaxesPaidPts..Visible(False)</string>
+        <string />
+        <string>Function.Data.DataTable.Close("TaxesPaid")</string>
+        <string />
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Enabled(False)</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Enabled(False)</string>
+        <string>Function.Intrinsic.Control.CallSub(loadparts)</string>
+        <string>Gui.F_TaxesPaidPts.cmdRefresh.Enabled(True)</string>
+        <string>Gui.F_TaxesPaidPts.cmdSave.Enabled(True)</string>
+        <string />
+        <string>Gui.F_TaxesPaidPts..Show</string>
+        <string />
+        <string>F.Intrinsic.Control.ExitSub</string>
+        <string />
+        <string>F.Intrinsic.Control.Label("cmdRefresh_Click_Err")</string>
+        <string>F.Intrinsic.Control.If(V.Ambient.ErrorNumber,&lt;&gt;,0)</string>
+        <string>	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)</string>
+        <string>	F.Intrinsic.UI.Msgbox(V.Local.sError)</string>
+        <string>	Function.Intrinsic.Control.CallSub(f_taxespaidpts_unload)</string>
+        <string>Function.Intrinsic.Control.EndIf</string>
+        <string>Program.Sub.cmdRefresh_Click.End</string>
+        <string />
+        <string>Program.Sub.F_TaxesPaidPts_UnLoad.Start</string>
+        <string>F.Intrinsic.Control.SetErrorHandler("F_TaxesPaidPts_UnLoad_Err")</string>
+        <string>F.Intrinsic.Control.ClearErrors</string>
+        <string />
+        <string>V.Local.sError.Declare(String)</string>
+        <string />
+        <string>Function.Data.DataTable.Close("TaxesPaid")</string>
+        <string>Function.ODBC.Connection!con.Close</string>
+        <string>Function.Intrinsic.Control.End</string>
+        <string />
+        <string>F.Intrinsic.Control.ExitSub</string>
+        <string />
+        <string>F.Intrinsic.Control.Label("F_TaxesPaidPts_UnLoad_Err")</string>
+        <string>F.Intrinsic.Control.If(V.Ambient.ErrorNumber,&lt;&gt;,0)</string>
+        <string>	Function.Intrinsic.String.Concat("Project: GCG_3613_TaxesPaidPts.gas",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)</string>
+        <string>	F.Intrinsic.UI.Msgbox(V.Local.sError)</string>
+        <string>	Function.Intrinsic.Control.END</string>
+        <string>Function.Intrinsic.Control.EndIf</string>
+        <string>Program.Sub.F_TaxesPaidPts_UnLoad.End</string>
+        <string />
+        <string>Program.Sub.Comments.Start</string>
+        <string>${$0$}$GCG_3613_TaxesPaidPts$}$SISCO$}$7/11/2016 1:13:47 PM$}$False</string>
+        <string>${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a screen for the foreign part screen of the Freight Trade Zone project.</string>
+        <string>Program.Sub.Comments.End</string>
+      </Lines>
+    </TextStrings>
+  </TextSource>
+  <Scrolling>
+    <WindowOriginY>80</WindowOriginY>
+    <Options>None</Options>
+  </Scrolling>
+  <Outlining>
+    <AllowOutlining>true</AllowOutlining>
+    <ImageSize>8</ImageSize>
+    <Ranges>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>23</Y>
+        </EndPoint>
+        <Text>Program.Sub.ScreenSU</Text>
+        <DisplayText>Program.Sub.ScreenSU</DisplayText>
+        <Visible>false</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>25</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>26</Y>
+        </EndPoint>
+        <Text>Program.Sub.Preflight</Text>
+        <DisplayText>Program.Sub.Preflight</DisplayText>
+        <Visible>false</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>28</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>47</Y>
+        </EndPoint>
+        <Text>Program.Sub.Main</Text>
+        <DisplayText>Program.Sub.Main</DisplayText>
+        <Visible>true</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>49</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>85</Y>
+        </EndPoint>
+        <Text>Program.Sub.LoadParts</Text>
+        <DisplayText>Program.Sub.LoadParts</DisplayText>
+        <Visible>true</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>87</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>106</Y>
+        </EndPoint>
+        <Text>Program.Sub.cmdSave_Click</Text>
+        <DisplayText>Program.Sub.cmdSave_Click</DisplayText>
+        <Visible>true</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>108</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>134</Y>
+        </EndPoint>
+        <Text>Program.Sub.cmdRefresh_Click</Text>
+        <DisplayText>Program.Sub.cmdRefresh_Click</DisplayText>
+        <Visible>true</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>136</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>154</Y>
+        </EndPoint>
+        <Text>Program.Sub.F_TaxesPaidPts_UnLoad</Text>
+        <DisplayText>Program.Sub.F_TaxesPaidPts_UnLoad</DisplayText>
+        <Visible>true</Visible>
+        <Level>0</Level>
+      </Range>
+      <Range>
+        <StartPoint>
+          <X>0</X>
+          <Y>156</Y>
+        </StartPoint>
+        <EndPoint>
+          <X>2147483647</X>
+          <Y>159</Y>
+        </EndPoint>
+        <Text>Program.Sub.Comments</Text>
+        <DisplayText>Program.Sub.Comments</DisplayText>
+        <Visible>false</Visible>
+        <Level>0</Level>
+      </Range>
+    </Ranges>
+  </Outlining>
+  <HyperText />
+  <Spelling />
+  <Braces />
+</SyntaxEdit>
