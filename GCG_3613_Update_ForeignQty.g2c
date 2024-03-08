@@ -1,0 +1,468 @@
+Program.Sub.Preflight.Start
+Variable.Global.uForeignFlag.Declare(Boolean,False)
+V.Global.sORDER_NO.Declare(String)
+V.Global.sORDER_SUFFIX.Declare(STRING)
+V.Global.sITEM.Declare(STRING)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+'This program will run from hook 28530 (Shipment > New Screen, Pre-save hook) and hook alskdfj (Shipment > Deletem, Pre OK hook)
+'If a user ships a foreign part, this project will subtract the quantity from the corresponding custom tables and report in a log table
+'If a user deletes a shipment, this project will look in the log table and return the corresponding quantity on the custom tables.
+'Written by FEQ on 11/18/2016
+
+V.Local.sHook.Declare(String)
+V.Local.sSql.Declare(String)
+V.Local.sTemp.Declare(String)
+
+F.ODBC.Connection!con.OpenConnection(V.Ambient.PDSN, V.Ambient.PUser, V.Ambient.PPass)
+V.Local.sHook.Set(V.Caller.Hook)
+F.Intrinsic.Control.SelectCase(V.Local.sHook)
+
+'New Shipment 
+F.Intrinsic.Control.Case("28530")
+	F.Intrinsic.Control.CallSub(newshipment)
+	
+F.Intrinsic.Control.Case("26260")
+	'build string- grab item numbers
+	Function.Intrinsic.Control.If(V.Passed.Global, =, "This variable will retain its value through out the thread")
+		V.Passed.Global.Set("")
+	Function.Intrinsic.Control.EndIf
+	V.Local.sTemp.Set(V.Passed.009005)
+	Function.Intrinsic.String.LimitSplit(V.Local.sTemp, 4, V.Local.sTemp)
+	F.Intrinsic.String.Build("{0}{1},", V.Passed.Global, V.Local.sTemp,V.Passed.Global)
+	
+'Delete Shipment return global variable to "" 
+F.Intrinsic.Control.Case("26262")
+Function.Intrinsic.Control.If(V.Passed.Global, <>, "")
+	V.Global.sORDER_NO.Set(V.Passed.009003)
+	V.Global.sORDER_SUFFIX.Set(V.Passed.009004)
+	V.Global.sITEM.Set(V.Passed.Global)
+	V.Passed.Global.Set("")
+	Function.Intrinsic.Control.CallSub(deleteshp)
+Function.Intrinsic.Control.EndIf
+
+'In case this is being fired from an incorrect hook
+F.Intrinsic.Control.CaseElse
+	F.Intrinsic.UI.Msgbox("Gab script mishooked.", "Hook Error")
+F.Intrinsic.Control.EndSelect
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.NewShipment.Start
+F.Intrinsic.Control.SetErrorHandler("NewShipment_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.iLim.Declare(Long)
+V.Local.iCount.Declare(Long)
+V.Local.sRow.Declare(String)
+V.Local.sPart.Declare(String)
+V.Local.sRev.Declare(String)
+V.Local.sCombo.Declare(String)
+V.Local.sSql.Declare(String)
+V.Local.sRet.Declare(String)
+
+'Pull part information getting passed
+F.Intrinsic.BDF.Load("AUX001", "AUX001")
+F.Intrinsic.BDF.ReadRowCount("AUX001", V.Local.iLim)
+
+'this needs to check the file as well for shipped qty > 0
+F.Intrinsic.Control.If(Variable.Local.iLim, =, 0)
+	F.Intrinsic.UI.Msgbox("No shipment found", "Data error")
+	F.Intrinsic.Control.CallSub(unload)
+F.Intrinsic.Control.EndIf
+
+'Creating the DataTable with information from the GCG_3613_QTY_LOG table
+V.Global.sORDER_SUFFIX.Set(V.Passed.FIRST-SEQ)
+
+F.Intrinsic.Control.For(Variable.Local.iCount, 0, V.Local.iLim.--, 1)
+'Check to see if any raw parts or parent part if bom are foreign parts
+	F.Intrinsic.BDF.ReadRow("AUX001", Variable.Local.iCount, Variable.Local.sRow)
+	F.Intrinsic.String.Split(Variable.Local.sRow, "|~|", Variable.Local.sRow)
+	'Setting passing string to Part/Rev*!*Loc*!*Quantity
+	'create global for QTY Log dataTable
+	V.Global.sORDER_NO.Set(V.Local.sRow(0))
+	V.Global.sITEM.Set(V.Local.sRow(1))
+	F.Intrinsic.String.Build("{0}*!*{1}*!*{2}", V.Local.sRow(8), V.Local.sRow(10), V.Local.sRow(3), V.Local.sCombo)
+	'Check to see if part is BOM
+	F.Intrinsic.String.Build("Select * from BOM_MSTR where PARENT = '{0}' ", V.Local.sRow(8).Trim, V.Local.sSql)
+	F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet.Trim, <>, "")
+		F.Intrinsic.Control.CallSub(bomcheck, "sCombo", V.Local.sCombo)
+	Function.Intrinsic.Control.Else
+	'If not bom, just check part
+		F.Intrinsic.Control.CallSub(foreignpartcheck, "sCombo", V.Local.sCombo)
+	F.Intrinsic.Control.EndIf	
+F.Intrinsic.Control.Next(Variable.Local.iCount)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("NewShipment_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.NewShipment.End
+
+Program.Sub.ForeignPartCheck.Start
+F.Intrinsic.Control.SetErrorHandler("ForeignPartCheck_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+V.Local.sSql.Declare(String)
+V.Local.sPart.Declare(String)
+V.Local.sRev.Declare(String)
+V.Local.sLoc.Declare(String)
+V.Local.fQty.Declare(Float)
+V.Local.sRet.Declare(String)
+
+'Check the GCG_3613_ForeignPart custom table to see if part is in table and set flag
+F.Intrinsic.String.Split(V.Args.sCombo, "*!*", V.Local.sPart)
+
+
+F.Intrinsic.String.RPad(V.Local.sPart," ", 20, V.Local.sPart)
+F.Intrinsic.String.Right(V.Local.sPart, 3, V.Local.sRev)
+F.Intrinsic.String.Left(V.Local.sPart, 17, V.Local.sPart)
+V.Local.sLoc.Set(V.Local.sPart(1))
+V.Local.fQty.Set(V.Local.sPart(2))
+
+F.Intrinsic.String.Build("Select * from GCG_3613_ForeignPart where Part ='{0}' and Rev = '{1}' ", V.Local.sPart.Trim, V.Local.sRev.Trim, V.Local.sSql)
+F.ODBC.Connection!con.ExecuteAndReturn(V.Local.sSql, V.Local.sRet)
+
+F.Intrinsic.Control.If(V.Local.sRet, <>, "")
+	'Add entry to DataTable-both tables
+	Function.Intrinsic.Control.CallSub(taxes_paid, "sPart",V.Local.sPart.Trim, "sRev", V.Local.sRev.Trim, "sLoc", V.Local.sLoc, "fQty", V.Local.fQty)
+	Function.Intrinsic.Control.CallSub(Shipped_QTY, "sPart",V.Local.sPart.Trim, "sRev", V.Local.sRev.Trim, "sLoc", V.Local.sLoc, "fQty", V.Local.fQty)
+
+F.Intrinsic.Control.EndIf
+V.Local.sRet.Set("")
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("ForeignPartCheck_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.ForeignPartCheck.End
+
+Program.Sub.BOMCheck.Start
+F.Intrinsic.Control.SetErrorHandler("BOMCheck_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.sSql.Declare(String)
+V.Local.sParent.Declare(String)
+V.Local.sPart.Declare(String)
+V.Local.sRet.Declare(String)
+V.Local.sLoc.Declare(String)
+V.Local.fQty.Declare(Float)
+V.Local.sCombo.Declare(String)
+
+'sParent will have the Parent, Location, Qty in the array entries
+F.Intrinsic.String.Split(Variable.Args.sCombo, "*!*", V.Local.sParent)
+F.Intrinsic.String.Build("Select * from V_BOM_MSTR where PARENT = '{0}' and SEQUENCE_BOM > 0 ", V.Local.sParent(0), V.Local.sSql)
+F.ODBC.Connection!con.OpenLocalRecordsetRO("rstbom", V.Local.sSql)
+F.Intrinsic.Control.DoUntil(V.ODBC.con!rstbom.EOF, =, True)
+	V.Local.sPart.Set(V.ODBC.con!rstbom.FieldVal!PART)
+	V.Local.fQty.Set(V.Local.sParent(2).Float)
+	F.Intrinsic.Math.Mult(V.Local.fQty, V.ODBC.con!rstbom.FieldValFloat!QUANTITY_6, V.Local.fQty)
+	F.Intrinsic.String.Build("{0}*!*{1}*!*{2}", V.Local.sPart, V.Local.sLoc, V.Local.fQty, V.Local.sCombo)
+	F.Intrinsic.Control.CallSub(foreignpartcheck, "sCombo", V.Local.sCombo)
+	F.ODBC.con!rstbom.MoveNext
+F.Intrinsic.Control.Loop
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("BOMCheck_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+Program.Sub.BOMCheck.End
+
+Program.Sub.Unload.Start
+Function.Intrinsic.Control.End
+
+Program.Sub.Unload.End
+
+Program.Sub.Taxes_Paid.Start
+F.Intrinsic.Control.SetErrorHandler("Taxes_Paid_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+V.Local.sRet.Declare(String)
+V.Local.sExp.Declare(String)
+V.Local.fOldQty.Declare(Float)
+V.Local.fNewQty.Declare(Float)
+V.Local.fQty.Declare(String)
+V.Local.fQty.Set(V.Args.fQty)
+
+F.Intrinsic.String.Build("PART = '{0}' And REV = '{1}' And LOC = '{2}'",V.Args.sPart,V.Args.sRev,V.Args.sLoc,V.Local.sExp )
+F.Data.DataTable.CreateFromSQL("TAX", "con","Select * From GCG_3613_Taxes_Paid")
+
+Function.Data.DataTable.Select("TAX", V.Local.sExp, V.Local.sRet)
+Function.Intrinsic.Control.If(V.Local.sRet,=, "***NORETURN***")
+	'then add  new to datatable
+	F.Intrinsic.Math.Sub(0, V.Args.fQty,V.Local.fQty)
+	Function.Data.DataTable.AddRow("TAX", "PART", V.Args.sPart, "REV", V.Args.sRev, "LOC" , V.Args.sLoc, "QTY",V.Local.fQty)
+	'save to db
+	F.Data.DataTable.SaveToDB("TAX", "con","GCG_3613_Taxes_Paid","PART*!*REV*!*LOC*!*QTY")
+Function.Intrinsic.Control.Else
+	'modify table: subtract from table the qty
+	'unsure of the delimiter here
+	F.Intrinsic.String.Split(V.Local.sRet, "*!*", V.Local.sRet)
+	V.Local.fOldQty.Set(Variable.DataTable.TAX(V.Local.sRet(0).Long).QTY!FieldValFloat)
+	F.Intrinsic.Math.Sub(V.Local.fOldQty, V.Args.fQty,V.Local.fNewQty)
+	F.Data.DataTable.SetValue("TAX", V.Local.sRet(0).Long, "QTY", V.Local.fNewQty) 
+	F.Data.DataTable.SaveToDB("TAX", "con","GCG_3613_Taxes_Paid","PART*!*REV*!*LOC")
+Function.Intrinsic.Control.EndIf
+F.Data.DataTable.Close("TAX")
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Taxes_Paid_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Taxes_Paid.End
+
+Program.Sub.Shipped_QTY.Start
+F.Intrinsic.Control.SetErrorHandler("Shipped_QTY_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+'Function.Intrinsic.Control.CallSub(Shipped_QTY, "sPart",V.Local.sPart.Trim, "sRev", V.Local.sRev.Trim, "sLoc", V.Local.sLoc, "fQty", V.Local.fQty)
+V.Local.ssql.Declare(String)
+V.Local.sZoneSort.Declare(STRING)
+V.Local.iRow.Declare(LONG,0)
+V.Local.iRowQTY.Declare(LONG)
+V.Local.fDeleteQTY.Declare(Float)
+V.Local.iZero.Declare(Long, 0)
+V.Local.sZoneFilter.Declare(String)
+V.Local.sFormatItem.Declare(STRING)
+V.Local.sPartRev.Declare(String)
+V.Local.fDeleteQTY.Set(V.Args.fQty)
+
+F.Global.Inventory.getgsspart(V.Args.sPart, V.Args.sRev, V.Local.sPartRev)
+
+F.Intrinsic.String.Build("Select PURCHASE_ORDER, PO_LINE as LINE,rtrim(' ') as CONTAINER,rtrim(PART), rtrim(LOCATION) as LOC, rtrim(' ') as REV ,rtrim(' ') as QTY_IN_INV,DATE_RECEIVED From V_PO_HISTORY where PART = '{0}' And LOCATION = '{1}' Order By DATE_RECEIVED", V.Local.sPartRev, V.Args.sLoc, V.Local.ssql)
+F.Data.DataTable.CreateFromSQL("PO", "con",V.Local.ssql)
+F.Data.DataTable.AddExpressionColumn("PO", "PO_INFO", "String","PURCHASE_ORDER + '-' + LINE")
+'use PO table to return container from PO_Container store in table
+F.Data.Dictionary.CreateFromSQL("dict", "con", "Select  PO + '-' + PO_LINE as PO_INFO, rtrim(CONTAINER) from V_PO_CONTAINER")
+Function.Data.Dictionary.SetDefaultReturn("dict", "") 
+F.Data.DataTable.FillFromDictionary("PO", "dict", "PO_INFO", "CONTAINER")
+F.Data.Dictionary.Close("dict")	
+
+F.Data.DataTable.AddExpressionColumn("PO", "PO_CONTAINER", "String","CONTAINER + '-' + PURCHASE_ORDER + '-' + LINE ")
+
+F.Data.Dictionary.CreateFromSQL("dict", "con", "Select CONTAINER + '-' + PURCHASE_ORDER + '-' + LINE as PO_CONTAINER, QTY_IN_INV from GCG_3613_ZONEPARTS")
+Function.Data.Dictionary.SetDefaultReturn("dict", "") 
+F.Data.DataTable.FillFromDictionary("PO", "dict", "PO_CONTAINER", "QTY_IN_INV")
+F.Data.Dictionary.Close("dict")	
+
+'add ORDER_NO, ORDER_SUFFIX, ITEM to datatable for QTY_LOG table
+Function.Data.DataTable.AddColumn("PO", "ORDER_NO", "String")
+Function.Data.DataTable.AddColumn("PO", "ORDER_SUFFIX","String")
+Function.Data.DataTable.AddColumn("PO", "ITEM", "String")
+Function.Data.DataTable.AddColumn("PO", "QUANTITY", "String")
+
+Function.Intrinsic.Control.DoUntil(V.Local.fDeleteQTY, =, V.Local.iZero)
+	V.Local.iRowQTY.set(Variable.DataTable.PO(V.Local.iRow).QTY_IN_INV!FieldVal)
+	Function.Intrinsic.Control.If(V.Local.fDeleteQTY, >, V.Local.iRowQTY)
+		'set quantity V.Local.iRowQTY
+		Function.Data.DataTable.SetValue("PO", V.Local.iRow, "QUANTITY", V.Local.iRowQTY)
+		F.Intrinsic.Math.Sub(V.Local.fDeleteQTY, V.Local.iRowQTY,V.Local.fDeleteQTY)
+		Function.Data.DataTable.SetValue("PO", V.Local.iRow, "QTY_IN_INV", 0)
+		F.Intrinsic.Math.Add(V.Local.iRow, 1,V.Local.iRow)
+	Function.Intrinsic.Control.Else
+		F.Intrinsic.Math.Sub(V.Local.iRowQTY, V.Local.fDeleteQTY,V.Local.iRowQTY)
+		'set quantity V.Local.V.Local.fDeleteQTY
+		Function.Data.DataTable.SetValue("PO", V.Local.iRow, "QUANTITY", V.Local.fDeleteQTY)
+		Function.Data.DataTable.SetValue("PO", V.Local.iRow, "QTY_IN_INV", V.Local.iRowQTY)
+		V.Local.fDeleteQTY.Set(0)
+	Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Control.Loop
+
+'set the values in the column for ORDER_NO, ORDER_SUFFIX, ITEM
+Function.Data.DataTable.SetValue("PO", -1, "ORDER_NO", V.Global.sORDER_NO)
+Function.Data.DataTable.SetValue("PO", -1, "ORDER_SUFFIX", V.Global.sORDER_SUFFIX)
+F.Data.DataTable.SetValue("PO", -1, "PART", V.Args.sPart)
+F.Data.DataTable.SetValue("PO", -1, "REV", V.Args.sRev)
+'format item column
+V.Local.sFormatItem.Set(V.Global.sITEM)
+F.Intrinsic.String.LPad(V.Local.sFormatItem,"0", 3, V.Local.sFormatItem)
+F.Intrinsic.String.RPad(V.Local.sFormatItem,"0", 4, V.Local.sFormatItem)
+Function.Data.DataTable.SetValue("PO", -1, "ITEM", V.Local.sFormatItem)
+
+
+'save modified QTY
+F.Data.DataTable.SaveToDB("PO", "con","GCG_3613_ZONEPARTS","CONTAINER*!*PURCHASE_ORDER*!*LINE*!*PART*!*REV*!*LOC",2,"CONTAINER@!@CONTAINER*!*PURCHASE_ORDER@!@PURCHASE_ORDER*!*LINE@!@LINE*!*PART@!@PART*!*REV@!@REV*!*LOC@!@LOC*!*QTY_IN_INV@!@QTY_IN_INV")
+'create view for filter where QUANTITY > 0
+Function.Data.DataView.Create("PO", "PO_VIEW")
+Function.Data.DataView.SetFilter("PO", "PO_VIEW", "QUANTITY > 0")
+Function.Data.DataView.ToDataTable("PO", "PO_VIEW", "QTY_LOG")
+'add new entry to table QTY_LOG
+F.Data.DataTable.SaveToDB("QTY_LOG", "con","GCG_3613_QTY_LOG"," ",128,"ORDER_NO@!@ORDER_NO*!*ORDER_SUFFIX@!@ORDER_SUFFIX*!*ITEM@!@ITEM*!*CONTAINER@!@CONTAINER*!*PURCHASE_ORDER@!@PURCHASE_ORDER*!*LINE@!@LINE*!*PART@!@PART*!*REV@!@REV*!*LOC@!@LOC*!*QUANTITY@!@QUANTITY" )
+
+Function.Data.DataView.Close("PO", "PO_VIEW")
+F.Data.DataTable.Close("PO")
+F.Data.DataTable.Close("QTY_LOG")
+
+
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Shipped_QTY_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Shipped_QTY.End
+
+Program.Sub.DeleteShp.Start
+F.Intrinsic.Control.SetErrorHandler("DeleteShp_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+v.Local.ssql.Declare(String)
+V.Local.sItem.Declare(String)
+V.Local.iNum.Declare(Long)
+V.Local.iRowCount.Declare(Long)
+V.Local.iRowNum.Declare(Long)
+V.Local.sTemp.Declare(String)
+
+'''''''''''''''''''''''''''''''''''''''''For testing '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'V.Global.sORDER_NO.Set("1234567") 
+'V.Global.sORDER_SUFFIX.Set("1111111")
+'V.Global.sITEM.Set("0010,0030,")
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'return to Taxes Paid and Zone Parts
+F.Intrinsic.String.Build("Select * from GCG_3613_QTY_LOG Where ORDER_NO = '{0}' And ORDER_SUFFIX = '{1}'",  V.Global.sORDER_NO, V.Global.sORDER_SUFFIX, V.Local.ssql)
+F.Data.DataTable.CreateFromSQL("Return","con",V.Local.ssql)
+Function.Data.DataTable.AddColumn("Return", "Delete", "String", "N")
+V.Local.iRowCount.Set(Variable.DataTable.Return.RowCount--)
+'split string for item line
+F.Intrinsic.String.Split(V.Global.sITEM,",", V.Local.sItem)
+'add 'Y' where items need to be reversed
+Function.Intrinsic.Control.For(V.Local.iNum, 0, V.Local.sItem.UBound, 1)
+	Function.Intrinsic.Control.For(V.Local.iRowNum, 0, V.Local.iRowCount,1)
+		V.Local.sTemp.Set(Variable.DataTable.Return(V.Local.iRowNum).ITEM!FieldVal)
+		Function.Intrinsic.Control.If(V.Local.sItem(V.Local.iNum), =, V.Local.sTemp)
+			F.Data.DataTable.SetValue("Return", V.Local.iRowNum,"Delete", "Y")
+		Function.Intrinsic.Control.EndIf
+	Function.Intrinsic.Control.Next(V.Local.iRowNum)
+Function.Intrinsic.Control.Next(V.Local.iNum)
+
+' Quantity for Taxes Paid
+Function.Data.DataTable.AddColumn("Return", "QTY", "String", "")
+F.Data.DataTable.AddExpressionColumn("Return", "TaxesPaid", "String", "PART + '-' + REV + '-' + LOC ")
+F.Data.Dictionary.CreateFromSQL("dict", "con", "Select PART + '-' + REV + '-' + LOC as TaxesPaid, QTY from GCG_3613_Taxes_Paid")
+Function.Data.Dictionary.SetDefaultReturn("dict", "") 
+F.Data.DataTable.FillFromDictionary("Return", "dict", "TaxesPaid", "QTY")
+F.Data.Dictionary.Close("dict")	
+' Quantity for Zone Parts
+Function.Data.DataTable.AddColumn("Return", "QTY_IN_INV", "String", "")
+F.Data.DataTable.AddExpressionColumn("Return", "ZoneParts", "String","PURCHASE_ORDER + '-' + LINE + '-' + PART + '-' + REV + '-' + LOC ")
+F.Data.Dictionary.CreateFromSQL("dict", "con", "Select PURCHASE_ORDER + '-' + LINE + '-' + PART + '-' + REV + '-' + LOC as ZoneParts, QTY_IN_INV from GCG_3613_ZONEPARTS")
+Function.Data.Dictionary.SetDefaultReturn("dict", "") 
+F.Data.DataTable.FillFromDictionary("Return", "dict", "ZoneParts", "QTY_IN_INV")
+F.Data.Dictionary.Close("dict")	
+
+'create a view where Delete = 'Y'
+F.Data.DataView.Create("Return", "RetView")
+Function.Data.DataView.SetFilter("Return", "RetView", "Delete = 'Y'")
+
+'add quantities back to tables: Taxes Paid and Zone Parts
+V.Local.iRowCount.Set(Variable.DataView.Return!RetView.RowCount--)
+
+Function.Intrinsic.Control.For(V.Local.iRowNum, 0, V.Local.iRowCount,1)
+	'Taxes Table QTY
+	F.Intrinsic.Math.Add(Variable.DataView.Return!RetView(V.Local.iRowNum).QUANTITY!FieldValFloat, Variable.DataView.Return!RetView(V.Local.iRowNum).QTY!FieldValFloat, V.Local.sTemp)
+	F.Data.DataView.SetValue("Return","RetView" ,V.Local.iRowNum,"QTY", V.Local.sTemp)
+	'Zone Parts	QTY_IN_INV
+	F.Intrinsic.Math.Add(Variable.DataView.Return!RetView(V.Local.iRowNum).QUANTITY!FieldValFloat, Variable.DataView.Return!RetView(V.Local.iRowNum).QTY_IN_INV!FieldValFloat, V.Local.sTemp)
+	F.Data.DataView.SetValue("Return","RetView" ,V.Local.iRowNum,"QTY_IN_INV", V.Local.sTemp)		
+Function.Intrinsic.Control.Next(V.Local.iRowNum)
+
+
+'save modified back to tables: Taxes Paid and Zone Parts
+F.Data.DataTable.SaveToDB("Return", "con","GCG_3613_Taxes_Paid","PART*!*REV*!*LOC",2,"PART@!@PART*!*REV@!@REV*!*LOC@!@LOC*!*QTY@!@QTY")
+F.Data.DataTable.SaveToDB("Return", "con","GCG_3613_ZONEPARTS","CONTAINER*!*PURCHASE_ORDER*!*LINE*!*PART*!*REV*!*LOC",2,"CONTAINER@!@CONTAINER*!*PURCHASE_ORDER@!@PURCHASE_ORDER*!*LINE@!@LINE*!*PART@!@PART*!*REV@!@REV*!*LOC@!@LOC*!*QTY_IN_INV@!@QTY_IN_INV")
+
+'close view and table
+Function.Data.DataView.Close("Return", "RetView")
+F.Data.DataTable.Close("Return")
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("DeleteShp_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_ForeignQty.g2c",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.DeleteShp.End
+
+Program.Sub.Comments.Start
+${$0$}$Update Foreign Part Quantity$}$SISCO$}$11/17/2016 2:08:42 PM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a program that runs upon Shipment > New and Delete to update the part quantities in the Taxes Paid and Zone Parts tables. This program is responsible for deducting parts upon creating a shipment and adding back the parts upon deleting a shipment.
+
+When a shipment is made, for each Part in the shipment, if it is a BOM it will be exploded and the Parent Part and its Children Parts will be checked against the Foreign Parts table. If a Part is a Foreign Part, the quantity shipped will be subtracted from the Taxes Paid quantity. It is possible for the Taxes Paid quantity to result in a negative number. The shipped quantity will also be subtracted from the Zone Parts table Qty In Inventory where the Part is in the oldest Container received. These quantities must not result in a negative number, but instead the difference should be subtracted from the next oldest container where Zone Parts Qty In Inventory is not equal zero.
+
+If a shipment is deleted, the Part quantities must be added back to the Taxes Paid and Zone Parts tables.
+
+The part quantities that were deducted from Zone Parts must return to the same Purchase Order/ Container they were deducted from.
+
+When a shipment is made, information including the number of parts shipped will be written to the Quantities Log table. This table will be used to determine which Purchase Order/Container to add the parts shipped back to if a shipment is deleted.
+
+You will have to use the PO_HISTORY table DATE_RECEIVED to help determine which Purchase Order/Container to deduct from.
+Program.Sub.Comments.End
