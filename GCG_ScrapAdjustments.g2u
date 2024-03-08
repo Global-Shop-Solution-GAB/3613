@@ -1,0 +1,333 @@
+Program.Sub.ScreenSU.Start
+Gui.Form..Create
+Gui.Form..Size(4575,2880)
+Gui.Form..MinX(0)
+Gui.Form..MinY(0)
+Gui.Form..Position(0,0)
+Gui.Form..BackColor(-2147483633)
+Gui.Form..MousePointer(0)
+Gui.Form..Event(UnLoad,Form_UnLoad)
+Gui.Form..Caption("Scrap & Adjustments")
+Gui.Form.txtPart.Create(TextBox,"",True,1695,300,0,90,330,False,0,"Arial",8,-2147483643,1)
+Gui.Form.txtRev.Create(TextBox,"",True,750,300,0,1920,345,False,0,"Arial",8,-2147483643,1)
+Gui.Form.txtLoc.Create(TextBox,"",True,630,300,0,2790,345,False,0,"Arial",8,-2147483643,1)
+Gui.Form.cmdPartBrowser.Create(Button)
+Gui.Form.cmdPartBrowser.Size(570,375)
+Gui.Form.cmdPartBrowser.Position(3480,300)
+Gui.Form.cmdPartBrowser.Caption("^")
+Gui.Form.cmdPartBrowser.Event(Click,cmdPartBrowser_Click)
+Gui.Form.lbl1.Create(Label,"Part",True,630,255,0,135,135,True,0,"Arial",8,-2147483633,0)
+Gui.Form.lbl2.Create(Label,"Rev",True,885,255,0,1950,135,True,0,"Arial",8,-2147483633,0)
+Gui.Form.lbl3.Create(Label,"Loc",True,630,255,0,2790,120,True,0,"Arial",8,-2147483633,0)
+Gui.Form.ddlContainer.Create(DropDownList)
+Gui.Form.ddlContainer.Size(2175,330)
+Gui.Form.ddlContainer.Position(75,1005)
+Gui.Form.ddlContainer.Event(Click,ddlContainer_Click)
+Gui.Form.ddlContainer.Enabled(False)
+Gui.Form.txtQty.Create(TextBox,"",True,1110,300,0,3030,1665,False,0,"Arial",8,-2147483643,1)
+Gui.Form.txtQty.MaxLength(15)
+Gui.Form.lbl4.Create(Label,"Quantity",True,945,255,0,3060,1455,True,0,"Arial",8,-2147483633,0)
+Gui.Form.lbl5.Create(Label,"Container",True,1290,255,0,90,795,True,0,"Arial",8,-2147483633,0)
+Gui.Form.ddlModify.Create(DropDownList)
+Gui.Form.ddlModify.Size(1095,330)
+Gui.Form.ddlModify.Position(60,1665)
+Gui.Form.ddlModify.Event(Click,ddlModify_Click)
+Gui.Form.lbl6.Create(Label,"Modify",True,870,255,0,90,1455,True,0,"Arial",8,-2147483633,0)
+Gui.Form.ddlReason.Create(DropDownList)
+Gui.Form.ddlReason.Size(1620,330)
+Gui.Form.ddlReason.Position(1290,1665)
+Gui.Form.ddlReason.Event(Click,ddlReason_Click)
+Gui.Form.lbl7.Create(Label,"Reason",True,900,255,0,1410,1455,True,0,"Arial",8,-2147483633,0)
+Gui.Form.cmdSave.Create(Button)
+Gui.Form.cmdSave.Size(945,375)
+Gui.Form.cmdSave.Position(3225,2100)
+Gui.Form.cmdSave.Caption("Save")
+Gui.Form.cmdSave.Event(Click,cmdSave_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+'  by DRH
+' This is a custom menu maintenance and reporting program that allows the user to manually adjust the quantities of Parts in Zone Containers. 
+' Quantity changes will be recorded and the user will be able to generate a report of the adjustments.
+
+Function.ODBC.Connection!con.OpenConnection(Variable.Ambient.PDSN, Variable.Ambient.PUser, Variable.Ambient.PPass)
+GUI.Form..Show
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_ScrapAdjustments.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.Form_UnLoad.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+GUI.Form..Visible(FALSE)
+Function.ODBC.Connection!con.Close
+Function.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_ScrapAdjustments.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.End
+
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Form_UnLoad.End
+
+Program.Sub.cmdPartBrowser_Click.Start
+F.Intrinsic.Control.SetErrorHandler("Form_UnLoad_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+V.Local.sTitles.Declare(String)
+V.Local.iWidths.Declare(Long)
+V.Local.sRet.Declare(String)
+V.Local.ssql.Declare(String)
+V.Local.bExists.Declare(Boolean)
+
+'clear and lock all items
+GUI.Form.ddlContainer.ClearItems
+GUI.Form.ddlModify.ClearItems
+GUI.Form.ddlReason.ClearItems
+GUI.Form.txtQty.Text("")
+GUI.Form.txtQty.Enabled(False)
+'repopulate ddl
+Function.Intrinsic.Control.CallSub(populateddl)
+'Browser for Part selection
+Function.Intrinsic.String.Split("PART*!*REV*!*LOC","*!*",variable.Local.sTitles)
+Function.Intrinsic.String.Split("2000*!*2000*!*2000","*!*",variable.local.iWidths)
+Function.Intrinsic.UI.Browser("Select","con","Select PART, REV, LOC from GCG_3613_ZONEPARTS",V.Local.sTitles,V.Local.iWidths,V.Local.sRet)
+'Split the return from the browser if it does not = ***CANCEL***
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(v.Local.sRet,"*!*",variable.Local.sRet)
+	'populate container ddl
+	F.Intrinsic.String.Build("Select (Part + '-' + PURCHASE_ORDER + '-' + CONTAINER) as PartOrder, Container From GCG_3613_ZONEPARTS Where Part = '{0}' AND REV = '{1}' AND LOC = '{2}'", V.Local.sRet(0),V.Local.sRet(1),V.Local.sRet(2), V.Local.ssql)
+	F.data.dictionary.createfromsql("containers","con",V.Local.ssql)
+	GUI.Form.ddlContainer.additems("dictionary","containers")
+	Function.Data.Dictionary.Close("containers")
+	'enable container
+	GUI.Form.ddlContainer.Enabled(TRUE)
+	'fill in text box
+	Gui.Form.txtPart.Text(V.Local.sRet(0))
+	Gui.Form.txtRev.Text(V.Local.sRet(1))
+	Gui.Form.txtLoc.Text(V.Local.sRet(2))
+F.Intrinsic.Control.Else
+	Gui.Form.txtPart.Text("")
+	Gui.Form.txtRev.Text("")
+	Gui.Form.txtLoc.Text("")
+F.Intrinsic.Control.EndIf
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Form_UnLoad_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_ScrapAdjustments.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.cmdPartBrowser_Click.End
+
+Program.Sub.ddlContainer_Click.Start
+Program.Sub.ddlContainer_Click.End
+
+Program.Sub.ddlModify_Click.Start
+F.Intrinsic.Control.SetErrorHandler("cmdPartBrowser_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+Function.Intrinsic.Control.If(V.Screen.Form!ddlModify.Text, =, "ADJUST")
+	GUI.Form.txtQty.Enabled(TRUE)
+Function.Intrinsic.Control.Else
+	GUI.Form.txtQty.Text("")
+	GUI.Form.txtQty.Enabled(False)
+Function.Intrinsic.Control.EndIf
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("cmdPartBrowser_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_ScrapAdjustments.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.ddlModify_Click.End
+
+Program.Sub.ddlReason_Click.Start
+Program.Sub.ddlReason_Click.End
+
+Program.Sub.cmdSave_Click.Start
+F.Intrinsic.Control.SetErrorHandler("ddlModify_Click_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+V.Local.bNum.Declare(Boolean)
+V.Local.ssql.Declare(String)
+V.Local.iQTY.Declare(LONG)
+V.Local.sReasonCode.Declare(String)
+V.Local.iMakeNum.Declare(Long)
+
+'check all is populated
+Function.Intrinsic.Control.If(V.Screen.Form!txtPart.Text, =, "")
+	F.Intrinsic.UI.Msgbox("Please Select a Part")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.ElseIf(V.Screen.Form!ddlContainer.Text, =, "")
+	F.Intrinsic.UI.Msgbox("Please Select a Container")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.ElseIf(V.Screen.Form!ddlModify.Text, =, "")
+	F.Intrinsic.UI.Msgbox("Please Select a Modifier")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.ElseIf(V.Screen.Form!ddlReason.Text, =, "")
+	F.Intrinsic.UI.Msgbox("Please Select a Reason")
+	Function.Intrinsic.Control.ExitSub
+Function.Intrinsic.Control.EndIf
+' if adjust is choosen- 
+Function.Intrinsic.Control.If(V.Screen.Form!ddlModify.Text, =, "ADJUST")
+	Function.Intrinsic.Control.If(V.Screen.Form!txtQty.Text, =, "")
+		F.Intrinsic.UI.Msgbox("Please Enter a Quantity")
+		Function.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.Else
+		'check if numeric
+		Function.Intrinsic.Math.IsNumeric(V.Screen.Form!txtQty.Text, V.Local.bNum)
+		Function.Intrinsic.Control.If(V.Local.bNum, =, FALSE)
+			F.Intrinsic.UI.Msgbox("Please Enter a  Numeric Quantity")
+			Function.Intrinsic.Control.ExitSub
+		Function.Intrinsic.Control.EndIf
+	Function.Intrinsic.Control.EndIf
+Function.Intrinsic.Control.EndIf
+
+'convert to number
+V.Local.iMakeNum.Set(V.Screen.Form!txtQty.Text)
+'get the code for the reason
+Function.Intrinsic.String.Build("Select CODE From GCG_3613_Reasons Where TEXT = '{0}'", V.Screen.Form!ddlReason.Text, V.Local.ssql)
+F.Data.DataTable.CreateFromSQL("Reason", "con", V.Local.ssql)
+V.Local.sReasonCode.Set(V.DataTable.Reason(0).CODE!FieldVal)
+'now save- if scrap set GCG_3613_ZONEPARTS table: QTY_IN_INV to zero, if adjust the field will be added to the quantity in text box: thus if a negative number is in the text box- the field value will go down
+'save all info to GCG_3613_Mod_Log
+'work around since the saveToDB is missing functionality- select empty datatable
+F.Intrinsic.String.Build("Select * From GCG_3613_Mod_Log Where Part = '{0}' And Modification = '{0}'", "", "", V.Local.ssql)
+F.Data.DataTable.CreateFromSQL("MOD_LOG", "con",V.Local.ssql)
+F.Intrinsic.String.Build("Select * From GCG_3613_ZONEPARTS Where CONTAINER = '{0}' AND PART = '{1}' AND REV = '{2}' AND LOC = '{3}'", V.Screen.Form!ddlContainer.Text,V.Screen.Form!txtPart.Text,V.Screen.Form!txtRev.Text, V.Screen.Form!txtLoc.Text, V.Local.ssql)
+F.Data.DataTable.CreateFromSQL("Zone", "con",V.Local.ssql)
+Function.Intrinsic.Control.If(V.Screen.Form!ddlModify.Text, =, "SCRAP")
+	Function.Data.DataTable.SetValue("Zone", 0, "QTY_IN_INV", 0)
+	Function.Data.DataTable.SaveToDB("Zone", "con", "GCG_3613_ZONEPARTS", "CONTAINER*!*PURCHASE_ORDER*!*PART*!*REV*!*LOC",2)
+	Function.Data.DataTable.AddRowByMap("MOD_LOG", "PART*!*REV*!*LOC*!*CONTAINER*!*MODIFICATION*!*QUANTITY*!*REASON_CODE*!*MOD_DATE",V.Screen.Form!txtPart.Text,V.Screen.Form!txtRev.Text, V.Screen.Form!txtLoc.Text,V.Screen.Form!ddlContainer.Text,V.Screen.Form!ddlModify.Text,V.Local.iMakeNum, V.Local.sReasonCode, v.Ambient.Date )
+	Function.Data.DataTable.SaveToDB("MOD_LOG", "con", "GCG_3613_Mod_Log", "",128)
+Function.Intrinsic.Control.Else
+	F.Intrinsic.Math.Add(V.Screen.Form!txtQty.Text,V.DataTable.Zone(0).QTY_IN_INV!FieldVal,V.Local.iQTY)
+	Function.Data.DataTable.SetValue("Zone", 0, "QTY_IN_INV", V.Local.iQTY)
+	Function.Data.DataTable.SaveToDB("Zone", "con", "GCG_3613_ZONEPARTS", "CONTAINER*!*PURCHASE_ORDER*!*PART*!*REV*!*LOC",2)
+	Function.Data.DataTable.AddRowByMap("MOD_LOG", "PART*!*REV*!*LOC*!*CONTAINER*!*MODIFICATION*!*QUANTITY*!*REASON_CODE*!*MOD_DATE",V.Screen.Form!txtPart.Text,V.Screen.Form!txtRev.Text, V.Screen.Form!txtLoc.Text,V.Screen.Form!ddlContainer.Text,V.Screen.Form!ddlModify.Text,V.Local.iMakeNum, V.Local.sReasonCode, v.Ambient.Date )
+	Function.Data.DataTable.SaveToDB("MOD_LOG", "con", "GCG_3613_Mod_Log", "",128)
+Function.Intrinsic.Control.EndIf
+'close tables
+Function.Data.DataTable.Close("Zone")
+Function.Data.DataTable.Close("MOD_LOG")
+Function.Data.DataTable.Close("Reason")
+'clear everything
+GUI.Form.txtPart.Text("")
+Gui.Form.txtRev.Text("")
+Gui.Form.txtLoc.Text("")
+GUI.Form.ddlContainer.ClearItems
+GUI.Form.ddlContainer.Enabled(FALSE)
+GUI.Form.ddlModify.ClearItems
+GUI.Form.ddlReason.ClearItems
+GUI.Form.txtQty.Text("")
+GUI.Form.txtQty.Enabled(False)
+'repopulate ddl
+Function.Intrinsic.Control.CallSub(populateddl)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("ddlModify_Click_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_ScrapAdjustments.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.cmdSave_Click.End
+
+Program.Sub.PopulateDDL.Start
+F.Intrinsic.Control.SetErrorHandler("PopulateDDL_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+GUI.Form.ddlModify.AddItem("SCRAP")
+GUI.Form.ddlModify.AddItem("ADJUST")
+F.data.dictionary.createfromsql("Reasons","con","Select CODE, TEXT From GCG_3613_Reasons")
+GUI.Form.ddlReason.additems("dictionary","Reasons")
+Function.Data.Dictionary.Close("Reasons")
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("PopulateDDL_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_ScrapAdjustments.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	Function.Intrinsic.Control.CallSub(form_unload)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.PopulateDDL.End
+
+Program.Sub.Comments.Start
+${$0$}$GCG_ScrapAdjustments.g2U$}$DH1$}$12/7/2016 10:53:20 AM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$This is a program that runs upon Shipment > New and Delete to update the part quantities in the Taxes Paid and Zone Parts tables. This program is responsible for deducting parts upon creating a shipment and adding back the parts upon deleting a shipment.
+
+When a shipment is made, for each Part in the shipment, if it is a BOM it will be exploded and the Parent Part and its Children Parts will be checked against the Foreign Parts table. If a Part is a Foreign Part, the quantity shipped will be subtracted from the Taxes Paid quantity. It is possible for the Taxes Paid quantity to result in a negative number. The shipped quantity will also be subtracted from the Zone Parts table Qty In Inventory where the Part is in the oldest Container received. These quantities must not result in a negative number, but instead the difference should be subtracted from the next oldest container where Zone Parts Qty In Inventory is not equal zero.
+
+If a shipment is deleted, the Part quantities must be added back to the Taxes Paid and Zone Parts tables.
+
+The part quantities that were deducted from Zone Parts must return to the same Purchase Order/ Container they were deducted from.
+
+When a shipment is made, information including the number of parts shipped will be written to the Quantities Log table. This table will be used to determine which Purchase Order/Container to add the parts shipped back to if a shipment is deleted.
+
+You will have to use the PO_HISTORY table DATE_RECEIVED to help determine which Purchase Order/Container to deduct from.
+Program.Sub.Comments.End
