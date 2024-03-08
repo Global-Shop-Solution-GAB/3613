@@ -1,0 +1,228 @@
+Program.Sub.Preflight.Start
+Variable.Global.sPart.Declare(String)
+Variable.Global.sPO.Declare(String)
+Variable.Global.sContainer.Declare(String)
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local..BulkDeclareString(sFields,sTypes,sFile,sRow,sRet,sExp)
+V.Local..BulkDeclareLong(iRow,iCount,iColCount)
+
+'this script will only run on hook 15041
+F.Intrinsic.Control.If(V.Caller.Hook,=,15041)
+	F.ODBC.Connection!con.OpenConnection(V.Ambient.PDSN,V.Ambient.PPass,V.Ambient.PUser)
+	F.Intrinsic.BDF.Load("AUX001","AUX001")
+	F.Intrinsic.BDF.ReadRowCount("AUX001",V.Local.iRow)
+	F.Intrinsic.Math.Sub(V.Local.iRow, 1, V.Local.iRow)
+	'We are going to store it as a string to split in order to store in a data table
+	F.Intrinsic.Control.For(V.Local.iCount, 0, V.Local.iRow, 1)
+		F.Intrinsic.BDF.ReadRow("AUX001", V.Local.iCount, V.Local.sRow)
+		F.Intrinsic.String.Build("{0}{1}!*!", V.Local.sFile, V.Local.sRow, V.Local.sFile)
+	F.Intrinsic.Control.Next(V.Local.iCount)
+	'This is for the purpose of deleting the last delimeter
+	F.Intrinsic.String.Build("{0}****", V.Local.sFile, V.Local.sFile)
+	F.Intrinsic.String.Split(V.Local.sFile, "!*!****", V.Local.sFile)
+	V.Local.sFields.Set("Line*!*Part*!*Mfg_Part*!*Loc*!*Description*!*A*!*B*!*C*!*D*!*E*!*F*!*G*!*H*!*J*!*Recieved*!*K*!*L*!*M*!*N*!*O*!*P*!*Q*!*R*!*S")
+	V.Local.sTypes.Set("String*!*String*!*String*!*String*!*String*!*String*!*String*!*String*!*String*!*String*!*Float*!*Float*!*Float*!*Float*!*Float*!*Float*!*Float*!*Float*!*String*!*String*!*String*!*String*!*String*!*String")
+	F.Data.DataTable.CreateFromString("Received", V.Local.sFile(0), V.Local.sFields, V.Local.sTypes, "|~|", "!*!", True)
+	'part
+	V.Local.sExp.Set("Part+'-'+Loc")
+	Function.Data.DataTable.AddExpressionColumn("Received", "PARTLOC", "STRING", V.Local.sExp)
+	F.Intrinsic.String.Format(V.Passed.000002,"0000000",V.Global.sPO)
+	F.Data.DataTable.AddColumn("Received", "PURCHASE_ORDER", "String",V.Global.sPO)
+	'check if part is foreign
+	F.Intrinsic.Control.CallSub(checkpart)
+F.Intrinsic.Control.EndIf
+
+'exit program
+F.Intrinsic.Control.CallSub(exit)
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_Qty_Inv.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(exit)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.CheckPart.Start
+F.Intrinsic.Control.SetErrorHandler("CheckPart_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.sFilter.Declare(String)
+V.Local.sExp.Declare(String)
+V.Local.iExists.Declare(Long)
+
+'the column 'RESULT' will have a value of 'T' if it exists in the Foreign Parts Table
+F.Data.DataTable.AddColumn("Received", "RESULT", "String","")
+Function.Data.Dictionary.CreateFromSQL("dict", "con", "Select Part +  Rev +'                                                  ' +'-' +Loc as PARTLOC , rTrim('T') as RESULT  From GCG_3613_ForeignPart")
+Function.Data.Dictionary.SetDefaultReturn("dict", "F")
+F.Data.dataTable.FillFromDictionary("Received", "dict","PARTLOC", "RESULT")
+F.Data.Dictionary.Close("dict")
+
+'create view of only foreign parts to see if they all exist in the zoneparts table
+V.Local.sFilter.Set("RESULT = 'T'")
+Function.Data.DataView.Create("Received","Foreign", 22, V.Local.sFilter, "")
+
+V.Local.iExists.Set(Variable.DataView.Received!Foreign.RowCount)
+Function.Data.DataView.Close("Received","Foreign")
+
+'Check to see if there are any parts that are in the foreign parts table. If none, exits program
+F.Intrinsic.Control.If(V.Local.iExists, =, 0)
+	F.Intrinsic.Control.CallSub(exit)
+F.Intrinsic.Control.EndIf
+
+'add container from ZONEPARTS
+V.Local.sExp.Set("Part+'-'+Loc+PURCHASE_ORDER")
+Function.Data.DataTable.AddExpressionColumn("Received", "PARTLOCPO", "STRING", V.Local.sExp)
+F.Data.DataTable.AddColumn("Received", "CONTAINER", "String","")
+Function.Data.Dictionary.CreateFromSQL("dict", "con", "Select Part +  Rev +'                                                  ' +'-' +Loc+PURCHASE_ORDER as PARTLOCPO , CONTAINER From GCG_3613_ZONEPARTS")
+Function.Data.Dictionary.SetDefaultReturn("dict", "")
+F.Data.dataTable.FillFromDictionary("Received", "dict","PARTLOCPO", "CONTAINER")
+F.Data.Dictionary.Close("dict")
+
+'add QTY
+F.Data.DataTable.AddColumn("Received", "QTY_IN_INV", "String","")
+Function.Data.Dictionary.CreateFromSQL("dict", "con", "Select Part +  Rev +'                                                  ' +'-' +Loc+PURCHASE_ORDER as PARTLOCPO , QTY_IN_INV From GCG_3613_ZONEPARTS")
+Function.Data.Dictionary.SetDefaultReturn("dict", "")
+F.Data.dataTable.FillFromDictionary("Received", "dict","PARTLOCPO", "QTY_IN_INV")
+F.Data.Dictionary.Close("dict")
+
+
+
+'check if any of the foreign parts do not have a container, RESULT = T and Container <> ''
+V.Local.sExp.Set("IIF(RESULT = 'T' AND CONTAINER <> '', 'T', 'F')")
+Function.Data.DataTable.AddExpressionColumn("Received", "Checked","STRING", V.Local.sExp)
+
+'create view of only foreign parts to see if they all exist in the zoneparts table
+V.Local.sFilter.Set("RESULT = 'T' AND Checked = 'F'")
+Function.Data.DataView.Create("Received","Received_View", 22, V.Local.sFilter, "")
+
+V.Local.iExists.Set(Variable.DataView.Received!Received_View.RowCount)
+Function.Data.DataView.Close("Received","Received_View")
+
+
+Function.Intrinsic.Control.If(V.Local.iExists, =, 0)
+	'all the foreign parts exists in the zoneparts table, add the columns and save to db
+	F.Intrinsic.Control.CallSub(updateqtyininv)
+Function.Intrinsic.Control.Else
+	'some of the parts are not in the zoneparts table- cancel core program
+	'canceling core program
+	V.Passed.777777.Set(1)
+	F.Intrinsic.UI.Msgbox("You must set up a zone and add the container before receiving. Please go to Menu item to set up a zone.")
+	F.Intrinsic.Control.CallSub(exit)
+Function.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Label("CheckPart_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_Qty_Inv.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(exit)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.CheckPart.End
+
+Program.Sub.UpdateQtyInInv.Start
+F.Intrinsic.Control.SetErrorHandler("UpdateUpdateQtyInInv_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.iRow.Declare(Long)
+V.Local.iREC.Declare(Long)
+V.Local.iQTY.Declare(Long)
+V.Local.sFilter.Declare(String)
+V.Local.sPART.Declare(String)
+V.Local.sLongPART.Declare(String)
+V.Local.sREV.Declare(String)
+V.Local.sLine.Declare(String)
+
+F.Data.DataTable.AddColumn("Received", "REV", "String","")
+'Add recieved QTY to QTY_IN_INV in zoneparts table
+F.Intrinsic.Control.For(V.Local.iRow,0,Variable.DataTable.Received.RowCount--,1)
+	V.Local.iREC.Set(V.DataTable.Received(V.Local.iRow).RECIEVED!FieldValLong)
+	V.Local.iQTY.Set(V.DataTable.Received(V.Local.iRow).QTY_IN_INV!FieldValLong)
+	F.Intrinsic.Math.Add(V.Local.iREC,V.Local.iQTY,V.Local.iQTY)
+	Function.Data.DataTable.SetValue("Received", V.Local.iRow,"QTY_IN_INV", V.Local.iQTY)
+	'split part out
+	V.Local.sLongPART.Set(V.DataTable.Received(V.Local.iRow).Part!FieldVal)
+	function.Intrinsic.String.Left(variable.local.sLongPART,17,variable.local.sPart)
+	Function.Data.DataTable.SetValue("Received", V.Local.iRow,"Part", variable.local.sPart)
+	function.Intrinsic.String.Mid(V.Local.sLongPART,17,3,V.Local.sREV)
+	Function.Data.DataTable.SetValue("Received", V.Local.iRow,"REV", V.Local.sREV)
+	'format line
+	V.Local.sLine.Set(V.DataTable.Received(V.Local.iRow).Line!FieldVal)
+	F.Intrinsic.String.Build("{0}0", V.Local.sLine, V.Local.sLine)
+	F.Intrinsic.String.LPad(V.Local.sLine, 0, 4, V.Local.sLine)
+	Function.Data.DataTable.SetValue("Received", V.Local.iRow,"Line", variable.local.sLine)
+F.Intrinsic.Control.Next(V.Local.iRow)
+
+
+'save to zoneparts table
+V.Local.sFilter.Set("RESULT = 'T'")
+Function.Data.DataView.Create("Received","Received_View", 22, V.Local.sFilter, "")
+Function.Data.DataView.ToDataTable("Received","Received_View", "SaveDB")
+
+F.Data.DataTable.SaveToDB("SaveDB", "con", "GCG_3613_ZONEPARTS","CONTAINER*!*PURCHASE_ORDER*!*PART*!*LOC*!*QTY_IN_INV*!*Line*!*REV",7,"CONTAINER@!@CONTAINER*!*PURCHASE_ORDER@!@PURCHASE_ORDER*!*PART@!@PART*!*LOC@!@LOC*!*QTY_IN_INV@!@QTY_IN_INV*!*LINE@!@LINE*!*REV@!@REV")
+
+F.Data.DataTable.Close("SaveDB")
+Function.Data.DataView.Close("Received","Received_View")
+F.Data.DataTable.Close("Received")
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("UpdateUpdateQtyInInv_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_Qty_Inv.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.CallSub(exit)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.UpdateQtyInInv.End
+
+Program.Sub.Exit.Start
+F.Intrinsic.Control.SetErrorHandler("Exit_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'closing connection
+F.ODBC.Connection!con.Close
+
+F.Intrinsic.Control.End
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Exit_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GCG_3613_Update_Qty_Inv.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	F.Intrinsic.Control.End
+
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Exit.End
+
+Program.Sub.Comments.Start
+${$0$}$GCG_3613_Update_Qty_Inv$}$RLK$}$10/7/2016 9:42:11 AM$}$False
+${$1$}$$}$$}$0$}$15041$}$PUS100-PB-PRE-OK-HOOK$}$10/7/2016 9:42:11 AM$}$(Program: PUR100GI; Screen: PUS100)
+
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$Update Qty In Inventory 
+This is a program that runs upon Purchasing > Transactions > P.O. Receipts to update the Qty In Inventory in the Zone Parts table for the given Purchase Order/ Container. 
+When the user presses OK on the P.O. Receipts screen, this program will first check to see if Parts include in the Purchase Order are in the Foreign Parts table. If none of the Parts are in the Foreign Parts table, the receiving process will continue as normal. 
+If there are Parts that exist in the Foreign Parts table, then the program will check for the Container and Purchase Order in the Zone Container table and for the Part in the Zone Parts table. If no zone records exist, the user will be notified that they must set up a zone and add the container before receiving, then the receiving process will be canceled. 
+If zone records do exist, then the corresponding GCG_3613_ZoneParts.Qty_In_Inv will be updated with the V_PO_LINES.QTY_RECEIVED value. 
+
+Program.Sub.Comments.End
